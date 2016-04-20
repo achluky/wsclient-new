@@ -67,6 +67,7 @@
                                     <li><a href=\"".base_url()."#\"><i class=\"fa fa-bars\"></i> Skala Nilai</a></li>
                                     <li><a href=\"".base_url()."#\"><i class=\"fa fa-bars\"></i> Kapasitas Mahasiswa Baru</a></li>
                                     <li><a href=\"".base_url()."matakuliah\"><i class=\"fa fa-graduation-cap\"></i> Mata Kuliah</a></li>
+                                    <li><a href=\"".base_url()."substansikuliah\"><i class=\"fa fa-graduation-cap\"></i> Substansi Kuliah</a></li>
                                   </ul> 
                                 </li>
                                 <li class=\"dropdown\">

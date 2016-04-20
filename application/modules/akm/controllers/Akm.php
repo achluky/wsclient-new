@@ -94,7 +94,6 @@ class Akm extends CI_Controller {
 			$objPHPExcel = PHPExcel_IOFactory::load($file_path);
 			$objPHPExcel->setActiveSheetIndex(0);
 			$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
-			//var_dump($cell_collection);
 			foreach ($cell_collection as $cell) {
 				$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 				$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
@@ -117,13 +116,10 @@ class Akm extends CI_Controller {
 				foreach ($arr_data as $value) {
 					$npm = $value['B'];
 					$smt = $value['D'];
-					//$filter_npm = "nipd like '%".$npm."%'";
 					$filter_npm = "nipd LIKE '%".$npm."%' AND p.id_sp='".$this->session->userdata('id_sp')."'";
 					$temp_npm = $this->feeder->getrecord($this->session->userdata('token'),'mahasiswa_pt',$filter_npm);
-					//var_dump($temp_npm);
 					if ($temp_npm['result']) {
 						$id_reg_pd = $temp_npm['result']['id_reg_pd'];
-						//$stat_reg = TRUE;
 					}
 					$temp_data[] = array('id_smt' => $value['D'],
 									  'id_reg_pd' => $id_reg_pd,
@@ -133,10 +129,8 @@ class Akm extends CI_Controller {
 									  'sks_total' => $value['H'],
 									 'id_stat_mhs' => $value['I']
 									);
-					//var_dump($temp_data);
-					$temp_key = array('id_smt' => $value['D'],
-									  'id_reg_pd' => $id_reg_pd
-									);
+									
+					$temp_key = array('id_smt' => $value['D'],'id_reg_pd' => $id_reg_pd);
 					$temp_data2 = array('ips' => $value['E'],
 									  	'sks_smt' => $value['G'],
 									  		'ipk' => $value['F'],
@@ -145,17 +139,14 @@ class Akm extends CI_Controller {
 									);
 					$array[] = array('key'=>$temp_key,'data'=>$temp_data2);
 				}
-				//updaterset($token,$table,$records)
 				$mode = $this->input->post('mode');
 				if ($mode==0) {
 					$temp_result = $this->feeder->insertrset($this->session->userdata['token'], $this->table, $temp_data);
 				} else {
 					$temp_result = $this->feeder->updaterset($this->session->userdata['token'], $this->table, $array);
 				}
-				//$temp_result = $this->feeder->insertrset($this->session->userdata['token'], $this->table, $temp_data);
 				$this->benchmark->mark('selesai');
 				$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
-				//var_dump($temp_result);
 				$i=0;
 				if ($temp_result['result']) {
 					foreach ($temp_result['result'] as $key) {

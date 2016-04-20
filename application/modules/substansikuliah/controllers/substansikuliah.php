@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * 
 */
 
-class Matakuliah extends CI_Controller {
+class Substansikuliah extends CI_Controller {
 
 	//private $data;
 	private $limit;
@@ -79,12 +79,12 @@ class Matakuliah extends CI_Controller {
 		$data['error_code'] = $temp_rec['error_code'];
 		$data['error_desc'] = $temp_rec['error_desc'];
 		$data['program_studi'] = $temp_sms['result'];
-		$data['site_title'] = 'Daftar Mata Kuliah';
-		$data['title_page'] = 'Daftar Mata Kuliah';
-		$data['ket_page'] = 'Menampilkan dan mengelola data mata kuliah';
-		$data['assign_js'] = 'js/matakuliah_dt.js';
+		$data['site_title'] = 'Daftar Substansi Kuliah';
+		$data['title_page'] = 'Daftar Substansi Kuliah';
+		$data['ket_page'] = 'Menampilkan dan mengelola data Substansi kuliah';
+		$data['assign_js'] = 'js/substansikuliah_dt.js';
 		$data['assign_modal'] = 'layout/modal_big_tpl.php';
-		tampil('matakuliah_view',$data);
+		tampil('substansikuliah_view',$data);
 	}
 
 	public function uploadexcel()
