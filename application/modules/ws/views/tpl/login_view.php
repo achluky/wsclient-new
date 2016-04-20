@@ -16,7 +16,7 @@
     <link href="<?php echo base_url();?>assets/css/bootstrap-switch.min.css?v=3.3.2" rel="stylesheet">
 
     <link href="<?php echo base_url();?>assets/css/app.css" rel="stylesheet">
-    <link rel="shortcut icon" href="wsclient.ico" title="Favicon" />
+    <!-- <link rel="shortcut icon" href="wsclient.ico" title="Favicon" /> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -31,6 +31,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
+                <center>
+                <img src="<?php echo base_url();?>assets/img/logo itera oke.png" class="img-polaroid" style="width: 100px; margin-top: 100px;">
+                </center>
                 <div class="login-panel panel panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">Please Login</h3>
@@ -66,13 +69,15 @@
                                     <input type="checkbox" id="db_cek" name="db_ws" checked class="form-control" data-label-text="DB Live" data-on-color="success" data-off-color="danger" data-size="small">
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
-                                <button class="btn btn-info " type="submit">Login</button> <small>Klik di <a href="<?php echo base_url();?>setup"> sini</a> untuk setup WSClient</small>
+                                <button class="btn btn-info " type="submit">Login</button> 
+                                <br/>
+                                <small>Klik di <a href="<?php echo base_url();?>setup"> sini</a> untuk setup WSClient</small>
                             </fieldset>
                         </form>
                     </div>
-                    <div class="panel-footer">
+                    <!-- <div class="panel-footer">
                         <center>Versi yang digunakan saat ini #<?php echo $versi;?></center>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

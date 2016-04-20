@@ -28,7 +28,6 @@
 										<button data-toggle=\"dropdown\" class=\"btn btn-sm btn-primary dropdown-toggle\">Mata Kuliah <span class=\"caret\"></span></button>
 										<ul class=\"dropdown-menu\">
 											<li><input type=\"radio\" name=\"mode\" id=\"matakuliah\" value=\"0\" checked><label for=\"matakuliah\">Mata Kuliah</label></li>
-											<li><input type=\"radio\" name=\"mode\" id=\"substansikuliah\" value=\"1\" ><label for=\"substansikuliah\">Substansi Kuliah</label></li>
 									    </ul>
 										<button class=\"btn btn-primary btn-sm btn-upload ladda-button\" data-style=\"expand-right\">Upload</button>
 									</span>

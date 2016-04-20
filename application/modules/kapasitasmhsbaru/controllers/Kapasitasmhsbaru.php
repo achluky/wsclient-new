@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Ws_dayatampung extends CI_Controller {
+class Kapasitasmhsbaru extends CI_Controller {
         
     private $limit;
     private $filter;

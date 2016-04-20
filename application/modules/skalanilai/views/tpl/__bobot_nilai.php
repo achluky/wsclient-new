@@ -1,78 +1,97 @@
-<div class="page-header" style="margin-top: 10px;" >
-    <div class="row">
-        <div class="col-md-4">
-            <h4>DATA SKALA NILAI (<?php echo $tabel;?>)</h4>
-        </div>
-        <div class="col-md-8">
-            
-        </div>    
+<div class="container-fluid">
+    <div class="page-header" style="margin-top: 50px;">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3><?php echo $title_page; ?></h3>
+                <small><?php echo $ket_page;?></small>
+            </div>
+        </div>  
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-            <div class="panel-heading">
-                <div class="row">
-                    <a href="javascript:void();" class="modalButton btn btn-success" data-toggle="modal" data-src="<?php echo base_url().$url_add;?>" data-target="#modalku">
-                        <span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> Upload Data (CSV File)
-                    </a>                    
-                    <a href="javascript:void();" class="modalButton btn btn-info" data-toggle="modal" data-src="<?php echo base_url();?>index.php/ws_bobot/form_createcsv_bobot_nilai" data-target="#modalku">
-                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download Format Data (CSV File)
-                    </a>
+    <div class="row">
+        <?php
+            if (($error_code == 0) && ($error_desc == '')) {
+                echo "<div class=\"col-ld-12 header_aksi\">
+                        <form action=\"".base_url()."skalanilai/uploadexcel\" class=\"frm_upload\" id=\"frmku\" enctype=\"multipart/form-data\" method=\"post\">
+                            <div class=\"form-group col-xs-4\">
+                                <div class=\"input-group\">
+                                    <span class=\"input-group-btn\">
+                                        <span class=\"btn btn-success btn-file btn-sm\">
+                                            Browse File... <input type=\"file\" name=\"userfile\" class=\"input-sm\">
+                                        </span>
+                                    </span>
+                                    <input type=\"text\" class=\"form-control input-sm\" readonly>
+                                    <span class=\"input-group-btn\">
+                                        <button class=\"btn btn-primary btn-sm btn-upload ladda-button\" data-style=\"expand-right\">Upload</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
 
-                    <a href="javascript:void();" class="modalButton btn btn-warning" data-toggle="modal" data-src="<?php echo base_url();?>index.php/welcome/listdir/<?php echo $tabel;?>" data-target="#modalku">
-                        <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Struktur tabel
-                    </a>
-                </div>
-            </div>
-            <table class="table table-hover table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <?php
-                            foreach ($listsdic['result'] as $key => $value) {
-                                echo "<th>".$value['column_name']."</th>";
-                            }
-                        ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        $i=0+$offset;
-                        foreach ($listsrec['result'] as $key => $value) {
-                            echo "<tr>
-                                        <td>".++$i."</td>";
-                                        foreach ($listsdic['result'] as $key2 => $value2) {
-                                            if (isset($value[$value2['column_name']])) 
-                                            {
-                                                if ($value2['column_name']=='id_sms') {
-                                                    $temp_isi = get_name_prodi($this->session->userdata('token'), 'sms', 'id_sms=\''.$value[$value2['column_name']].'\' ').' ';
-                                                } else {
-                                                    $temp_isi = $value[$value2['column_name']];
-                                                }
-                                            } else {
-                                                $temp_isi = "";
-                                            }
-                                            echo "<td>".$temp_isi."</td>";
-                                        }
-                               echo "</tr>";
-                        }        
-                    ?>
-                </tbody>
-            </table>
-
-            <div class="row">
-                <div class="col-md-6" style="margin-top: 40px;">
-                    <?php
-                        $offset==0? $start=$this->pagination->cur_page: $start=$offset+1;
-                        $end = $this->pagination->cur_page * $this->pagination->per_page;
-                        
-                        //echo "Showing ".$start.' - '.$end.' of '.$total.' result <br />'.$this->pagination->cur_page.'<br />'.$this->pagination->per_page;
-                        echo "Showing ".$start.' - '.$end.' of '.$total.' results';
-                    ?>
-                </div>
-                <div class="col-md-6">
-                    <?php echo $pagination;?>
-                </div>
-            </div>
+                        <div class=\"col-sm-2\">
+                            <a href=\"javascript:void();\" class=\"btn btn-info btn-sm btn-download ladda-button\" data-style=\"expand-right\">
+                                <i class=\"fa fa-download\"></i> Generate Template
+                            </a>
+                        </div>
+                    </div>";
+            }
+        ?>  
+    </div>
+    <div class="alert alert-warning" role="alert" style="display:none;" ><!-- style="display:none;"-->
+        <div class="loading"></div>
+        <div class="isi"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <?php
+                if (($error_code != 0) && ($error_desc != '')) {
+                    echo "<div class=\"bs-callout bs-callout-danger\">
+                            <h4>Error ".$error_code."</h4>
+                            <p>";
+                                echo $error_desc;
+                                echo $error_code==100?' Silahkan generate token kembali melalui menu profil diatas.':'';
+                            echo "</p>
+                          </div>";
+                } else {
+                    echo "<table class=\"table table-hover table-striped table-bordered\" id=\"dt_data\">
+                            <thead>
+                                <tr>
+                                    <th width=\"10px;\">#</th>
+                                    <th>Program Studi</th>
+                                    <th>Nilai Huruf</th>
+                                    <th>Nilai Index</th>
+                                    <th>Bobot Maximum</th>
+                                    <th>Bobot Minimum</th>
+                                    <th>Tanggal Mulai Efektif</th>
+                                    <th>Tanggal Akhir Efektif</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Program Studi</th>
+                                    <th>Nilai Huruf</th>
+                                    <th>Nilai Index</th>
+                                    <th>Bobot Maximum</th>
+                                    <th>Bobot Minimum</th>
+                                    <th>Tanggal Mulai Efektif</th>
+                                    <th>Tanggal Akhir Efektif</th>
+                                </tr>
+                            </tfoot>
+                        </table>";
+                }
+            ?>
+        </div>
     </div>
 </div>

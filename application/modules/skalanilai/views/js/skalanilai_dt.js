@@ -4,14 +4,13 @@
 			"aaSorting": [],
 			"lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
 			"iDisplayLength": 10,
-			//"sPaginationType": "full_numbers",
 			"processing": true,
 			"language": {
 				"processing": "<i class=\"fa fa-spinner fa-spin\"></i> Loading data, please wait..." //add a loading image,simply putting <img src="loader.gif" /> tag.
 			},
 			"serverSide": true,
 			"ajax": {
-				"url": top_url+'mahasiswa/jsonMHS',
+				"url": top_url+'skalanilai/json',
 				"type": "POST"
             },
 			"columns": [
@@ -28,15 +27,14 @@
 		$.fn.dataTable.ext.errMode = 'throw';
 		$('a.modalButton').click(function(){
 			var src = $(this).attr('data-src');
-			alert(src);
-			//$('#isi').html('Loading, please wait...');
-			//$('#isi').load(src);
+			$('#isi').html('Loading, please wait...');
+			$('#isi').load(src);
 		});
 	});
 
 	$(".btn-download").click(function(e){
 		e.preventDefault();
-		var url = top_url+'mahasiswa/createexcel/';
+		var url = top_url+'skalanilai/createexcel/';
 		var l = Ladda.create(this);
 		$(".isi").hide();
 		l.start();
@@ -54,10 +52,8 @@
 	});
 
 	(function() {
-		//var bar = $('.bar');
 		var bar = $('.progress-bar');
 		var percent = $('.percent');
-		//var status = $('#status');
 		$('.frm_upload').ajaxForm({
 			beforeSend: function() {
 				$('.btn-upload').attr('disabled', 'disabled');
@@ -70,7 +66,6 @@
 			},
 			uploadProgress: function(event, position, total, percentComplete) {
 				var percentVal = percentComplete + '%';
-				//bar.width(percentVal);
 				bar.attr('style', percentVal);
 				if (percentVal=='100%') {
 					percent.html('100%');
@@ -80,12 +75,9 @@
 					percent.html('Upload '+percentVal);
 					$(".loading").html('<i class=\"fa fa-spinner fa-spin\"></i> Upload file '+percentVal);
 				}
-				
-				//console.log(percentVal, position, total);
 			},
 			success: function(data) {
 				var percentVal = '100%';
-				//bar.width(percentVal)
 				bar.attr('style', percentVal);
 				percent.html(percentVal);
 				$('.btn-upload').removeAttr('disabled');

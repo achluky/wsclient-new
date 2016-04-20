@@ -22,7 +22,7 @@
     <link href="<?php echo base_url(); ?>assets/css/select2.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/select2-bootstrap.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/app.css" rel="stylesheet">
-    <link rel="shortcut icon" href="wsclient.ico" title="Favicon" />
+    <!-- <link rel="shortcut icon" href="wsclient.ico" title="Favicon" /> -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -64,8 +64,8 @@
                                     <!-- li><a href=\"".base_url()."nilai\"><i class=\"fa fa-file-text-o\"></i> Nilai Perkuliahan</a></li -->
                                     <li><a href=\"".base_url()."akm\"><i class=\"fa fa-pencil-square-o\"></i> Aktivitas Kuliah Mahasiswa</a></li>
                                     <!--li><a href=\"".base_url()."mhslulus\"><i class=\"fa fa-graduation-cap\"></i> Mahasiswa Lulus / DO</a></li -->
-                                    <li><a href=\"".base_url()."#\"><i class=\"fa fa-bars\"></i> Skala Nilai</a></li>
-                                    <li><a href=\"".base_url()."#\"><i class=\"fa fa-bars\"></i> Kapasitas Mahasiswa Baru</a></li>
+                                    <li><a href=\"".base_url()."skalanilai\"><i class=\"fa fa-bars\"></i> Skala Nilai</a></li>
+                                    <li><a href=\"".base_url()."Kapasitasmhsbaru\"><i class=\"fa fa-bars\"></i> Kapasitas Mahasiswa Baru</a></li>
                                     <li><a href=\"".base_url()."matakuliah\"><i class=\"fa fa-graduation-cap\"></i> Mata Kuliah</a></li>
                                     <li><a href=\"".base_url()."substansikuliah\"><i class=\"fa fa-graduation-cap\"></i> Substansi Kuliah</a></li>
                                   </ul> 
@@ -95,12 +95,7 @@
           
           <ul class="nav navbar-nav navbar-right">
             <?php
-                echo "<li class=\"white\">
-                              <a href=\"".base_url()."welcome/update\">
-                                  <i class=\"fa fa-bell-o fa-refresh\"></i> <span class=\"badge\" id=\"notif\">0</span>
-                              </a>
-                          </li>
-                          <li class=\"dropdown active\"><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\">
+                echo "    <li class=\"dropdown active\"><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\">
                                     <i class=\"fa fa-user\"></i>  ".$this->session->userdata('username')." on ".$this->session->userdata('nm_lemb')." <span class=\"caret\"></span>
                               </a>
                               <ul class=\"dropdown-menu\" role=\"menu\">
@@ -115,6 +110,12 @@
             ?>
           </ul>
         </div><!-- /.navbar-collapse -->
+        
+        <!-- <li class=\"white\">
+            <a href=\"".base_url()."welcome/update\">
+                <i class=\"fa fa-bell-o fa-refresh\"></i> <span class=\"badge\" id=\"notif\">0</span>
+            </a>
+        </li> -->
         <!--small>
             <marquee>
               <font color="#ce4844" >
@@ -135,7 +136,7 @@
 
     <footer class="footer">
       <div class="container copy">
-        WS CLient &copy; <?php echo date('Y');?> 
+        WS CLient &copy; <?php echo date('Y');?> <a href="https://github.com/achluky/wsclient-new" target="_blank_">GitHub</a>
       </div>
     </footer>
 

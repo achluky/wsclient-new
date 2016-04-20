@@ -12,8 +12,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 class File extends CI_Controller {
-
-	//private $data;
 	private $path_temps;
 	private $xml_file;
 	private $url_ws;
@@ -26,7 +24,6 @@ class File extends CI_Controller {
 			redirect('ws');
 		} else {
 			$this->path_temps = $this->config->item('path_temps');
-			//$this->xml_file = 'wsclient.xml';
 			$this->url_ws = $this->config->item('url_ws');
 			$this->url_update = $this->config->item('url_update');
 		}
@@ -36,7 +33,6 @@ class File extends CI_Controller {
 	{
 		if ($file!='') {
 			$filename = $this->path_temps.$file;
-			//delete_files($filename);
 			force_download($filename, NULL);
 			unlink($filename);
 		} else {
