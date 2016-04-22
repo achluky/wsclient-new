@@ -22,7 +22,6 @@
     <link href="<?php echo base_url(); ?>assets/css/select2.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/select2-bootstrap.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/app.css" rel="stylesheet">
-    <!-- <link rel="shortcut icon" href="wsclient.ico" title="Favicon" /> -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -60,12 +59,10 @@
                                   <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\"><i class=\"fa fa-clone\"></i> Import Data <span class=\"caret\"></span></a>
                                   <ul class=\"dropdown-menu\" role=\"menu\">
                                     <li><a href=\"".base_url()."mahasiswa\"><i class=\"fa fa-user-plus\"></i> Mahasiswa</a></li>
-                                    <li><a href=\"".base_url()."kelas\"><i class=\"fa fa-bars\"></i> Kelas Perkuliahan</a></li>
-                                    <!-- li><a href=\"".base_url()."nilai\"><i class=\"fa fa-file-text-o\"></i> Nilai Perkuliahan</a></li -->
                                     <li><a href=\"".base_url()."akm\"><i class=\"fa fa-pencil-square-o\"></i> Aktivitas Kuliah Mahasiswa</a></li>
-                                    <!--li><a href=\"".base_url()."mhslulus\"><i class=\"fa fa-graduation-cap\"></i> Mahasiswa Lulus / DO</a></li -->
-                                    <li><a href=\"".base_url()."skalanilai\"><i class=\"fa fa-bars\"></i> Skala Nilai</a></li>
-                                    <li><a href=\"".base_url()."Kapasitasmhsbaru\"><i class=\"fa fa-bars\"></i> Kapasitas Mahasiswa Baru</a></li>
+                                    <li><a href=\"".base_url()."skalanilai\"><i class=\"fa fa-book\"></i> Skala Nilai</a></li>
+                                    <!-- li><a href=\"".base_url()."Kapasitasmhsbaru\"><i class=\"fa fa-book\"></i> Kapasitas Mahasiswa Baru</a></li -->
+                                    <li><a href=\"".base_url()."kelas\"><i class=\"fa fa-graduation-cap\"></i> Kelas Perkuliahan</a></li>
                                     <li><a href=\"".base_url()."matakuliah\"><i class=\"fa fa-graduation-cap\"></i> Mata Kuliah</a></li>
                                     <li><a href=\"".base_url()."substansikuliah\"><i class=\"fa fa-graduation-cap\"></i> Substansi Kuliah</a></li>
                                   </ul> 

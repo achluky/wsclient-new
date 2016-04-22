@@ -15,7 +15,7 @@
 		<?php
 			if (($error_code == 0) && ($error_desc == '')) {
 				echo "<div class=\"col-ld-12 header_aksi\">
-						<form action=\"".base_url()."matakuliah/uploadexcel\" class=\"frm_upload\" id=\"frmku\" enctype=\"multipart/form-data\" method=\"post\">
+						<form action=\"".base_url()."substansikuliah/uploadexcel\" class=\"frm_upload\" id=\"frmku\" enctype=\"multipart/form-data\" method=\"post\" disabled>
 							<div class=\"form-group col-xs-4\">
 								<div class=\"input-group\">
 									<span class=\"input-group-btn\">
@@ -29,7 +29,7 @@
 										<ul class=\"dropdown-menu\">
 											<li><input type=\"radio\" name=\"mode\" id=\"substansikuliah\" value=\"1\" checked><label for=\"substansikuliah\">Substansi Kuliah</label></li>
 									    </ul>
-										<button class=\"btn btn-primary btn-sm btn-upload ladda-button\" data-style=\"expand-right\">Upload</button>
+										<button class=\"btn btn-primary btn-sm btn-upload ladda-button\" data-style=\"expand-right\" disabled>Upload</button>
 									</span>
 								</div>
 			                </div>
@@ -39,7 +39,7 @@
 								<div class=\"form-group\">
 
 								    <div class=\"col-sm-4\">
-								    	<select class=\"form-control input-sm prodi\" name=\"prodi\" required>
+								    	<select class=\"form-control input-sm prodi\" name=\"prodi\" required disabled=\"disabled\">
 											<option value=\"\">-Pilih Nama Prodi-</option>
 										  ";
 										  		
@@ -52,7 +52,7 @@
 								    </div>
 
 								    <div class=\"col-sm-2\">
-									    <a href=\"javascript:void();\" class=\"btn btn-info btn-sm btn-download ladda-button\" data-style=\"expand-right\">
+									    <a href=\"javascript:void();\" class=\"btn btn-info btn-sm btn-download ladda-button\" data-style=\"expand-right\" disabled>
 											<i class=\"fa fa-download\"></i> Generate Template
 										</a>
 									</div>
@@ -83,13 +83,14 @@
 							<thead>
 								<tr>
 									<th width=\"10px;\">#</th>
-									<th>Kode MK</th>
-									<th>Nama MK</th>
-									<th>SKS</th>
+									<th>Nama Substansi</th>
+									<th>Jenis Substansi</th>
 									<th>Prog. Studi</th>
-									<th>Jenis MK</th>
-									<th>Kelompok MK</th>
-									<th>Status</th>
+									<th>SKS MK</th>
+									<th>SKS tatap muka</th>
+									<th>SKS praktikum</th>
+									<th>Action</th>
+									
 								</tr>
 							</thead>
 							<tbody>
@@ -107,13 +108,13 @@
 							<tfoot>
 								<tr>
 									<th>#</th>
-									<th>Kode MK</th>
-									<th>Nama MK</th>
-									<th>SKS</th>
+									<th>Nama Substansi</th>
+									<th>Jenis Substansi</th>
 									<th>Prog. Studi</th>
-									<th>Jenis MK</th>
-									<th>Kelompok MK</th>
-									<th>Status</th>
+									<th>SKS MK</th>
+									<th>SKS tatap muka</th>
+									<th>SKS praktikum</th>
+									<th>Action</th>
 								</tr>
 							</tfoot>
 						</table>";

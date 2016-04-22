@@ -36,7 +36,7 @@ class Substansikuliah extends CI_Controller {
 			$this->filter = $this->config->item('filter');
 			$this->order = $this->config->item('order');
 			$this->offset = $this->config->item('offset');
-			$this->table = 'mata_kuliah';
+			$this->table = 'substansi_kuliah';
 			$this->table1 = 'sms';
 			$this->load->model('m_feeder','feeder');
 			$this->load->helper('csv');
@@ -277,7 +277,7 @@ class Substansikuliah extends CI_Controller {
 		}
 	}
 
-	public function jsonMHS()
+	public function jsonSK()
 	{
 		$search = $this->input->post('search');
 		$sSearch = trim($search['value']);
@@ -292,20 +292,25 @@ class Substansikuliah extends CI_Controller {
 		$totalFiltered = $totalData;
 
 		if (!empty($sSearch)) {
-			$temp_filter = "((kode_mk LIKE '%".$sSearch."%') OR (nm_mk LIKE '%".$sSearch."%') AND (p.id_sms=''))";
+			$temp_filter = "((id_jns_subst LIKE '%".$sSearch."%') OR (nm_subst LIKE '%".$sSearch."%') AND (p.id_sms=''))";
 			$temp_rec = $this->feeder->getrset($this->session->userdata('token'),
-												$this->table, $temp_filter,
-												'nm_mk DESC',$temp_limit,$temp_offset
-						);
+												$this->table, 
+												$temp_filter,
+												'nm_subst DESC',
+												$temp_limit,
+												$temp_offset
+												);
 			$__total = $this->feeder->count_all($this->session->userdata('token'),$this->table,$temp_filter);
 			$totalFiltered = $__total['result'];
 		} else {
-			// $temp_filter = "p.id_sms=''";
 			$temp_filter = "";
 			$temp_rec = $this->feeder->getrset($this->session->userdata('token'),
-												$this->table, $temp_filter,
-												'nm_mk DESC',$temp_limit,$temp_offset
-						);
+												$this->table, 
+												$temp_filter,
+												'nm_subst DESC',
+												$temp_limit,
+												$temp_offset
+												);
 		}
 		$temp_error_code = $temp_rec['error_code'];
 		$temp_error_desc = $temp_rec['error_desc'];
@@ -316,62 +321,22 @@ class Substansikuliah extends CI_Controller {
 			foreach ($temp_rec['result'] as $key) {
 				$temps = array();
 				$temps[] = ++$i+$temp_offset;
-				$temps[] = $key['kode_mk'];
-				$temps[] = $key['nm_mk'];
-				$temps[] = $key['sks_mk'];
+
+				$temps[] = $key['nm_subst'];
+
+				$filter_sms = "id_jns_subst='".$key['id_jns_subst']."'";
+				$temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'jenis_subst',$filter_sms);
+				$temps[] = $temp_sms['result']['nm_jns_subst'];
 
 				$filter_sms = "id_sms='".$key['id_sms']."'";
 				$temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'sms',$filter_sms);
-				$filter_jenjang = "id_jenj_didik='".$temp_sms['result']['id_jenj_didik']."'";
-				$temp_jenjang = $this->feeder->getrecord($this->session->userdata('token'),'jenjang_pendidikan',$filter_jenjang);
+				$temps[]= $temp_sms['result']['nm_lemb']."'";
+				
 
-				$temps[] = $temp_jenjang['result']['nm_jenj_didik'].' '.$temp_sms['result']['nm_lemb']; //program studi
-				switch ($key['jns_mk']) {
-					case 'A':
-						$temps[] = "Wajib";
-						break;
-					case 'B':
-						$temps[] = "Pilihan";
-						break;
-					case 'C':
-						$temps[] = "Wajib Peminatan";
-						break;
-					case 'D':
-						$temps[] = "Pilihan Peminatan";
-						break;
-					case 'E':
-						$temps[] = "Tugas akhir/Skripsi/Tesis/Disertasi";
-						break;
-					default:
-						$temps[]="";
-						break;
-				}
-				switch ($key['kel_mk']) {
-					case 'A':
-						$temps[]="MPK-Pengembangan Kepribadian";
-						break;
-					case 'B':
-						$temps[]="MKK-Keilmuan dan Ketrampilan";
-						break;
-					case 'C':
-						$temps[]="MKB-Keahlian Berkarya";
-						break;
-					case 'D':
-						$temps[]="MPB-Perilaku Berkarya";
-						break;
-					case 'E':
-						$temps[]="MBB-Berkehidupan Bermasyarakat";
-						break;
-					case 'F':
-						$temps[]="MKU/MKDU";
-						break;
-					case 'G':
-						$temps[]="MKDK";
-						break;
-					default:
-						$temps[] = "";
-						break;
-				}
+				$temps[] = $key['sks_mk'];
+				$temps[] = $key['sks_tm'];
+				$temps[] = $key['sks_prak'];
+				$temps[] = $key['sks_prak_lap'];
 				$temps[] = "";
 				$temp_data[] = $temps;
 			}

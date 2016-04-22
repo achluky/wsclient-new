@@ -11,7 +11,7 @@
 			},
 			"serverSide": true,
 			"ajax": {
-				"url": top_url+'matakuliah/jsonMHS',
+				"url": top_url+'substansikuliah/jsonSK',
 				"type": "POST"
             },
 			"columns": [
@@ -29,8 +29,6 @@
 		$('a.modalButton').click(function(){
 			var src = $(this).attr('data-src');
 			alert(src);
-			//$('#isi').html('Loading, please wait...');
-			//$('#isi').load(src);
 		});
 	});
 

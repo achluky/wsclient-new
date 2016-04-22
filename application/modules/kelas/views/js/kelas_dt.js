@@ -34,9 +34,10 @@
 		e.preventDefault();
 		var url = top_url+'kelas/createexcel/';
 		var l = Ladda.create(this);
+		var prodi = $('.prodi').val();
 		$(".isi").hide();
 		l.start();
-		$.get(url, function(returnData) {
+		$.get(url+'?p='+prodi , function(returnData) {
 			$(".alert").show();
 			$(".isi").show();
 			if (!returnData) {
@@ -100,46 +101,6 @@
 		}); 
 	})();
 
-	/*$(".btn-upload").click(function(e){
-		e.preventDefault();
-		var l = Ladda.create(this);
-		l.start();
-		uploadexcel();
-		l.stop();
-		return false;
-	});
-
-	function uploadexcel() {
-		var urls = $(".frm_upload").attr("action");
-		$.ajax({
-			url: urls,
-			type: "POST",
-			data: new FormData($('.frm_upload')[0]),
-			mimeType:"multipart/form-data",
-			contentType: false,
-			cache: false,
-			processData:false,
-			beforeSend:function()
-			{
-				$(".isi").hide();
-				$(".loading").html('<i class=\"fa fa-spinner fa-spin\"></i> Extract file...Please wait...');
-			},
-			complete:function()
-			{
-				$(".loading").empty();
-				$(".isi").show();
-			},
-			error: function()
-			{
-				$('.isi').html('<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>No respond from server.</div>');
-			},
-			success: function(data)
-			{
-				$('#dt_data').DataTable().ajax.reload();
-				$(".isi").html(data);
-			}
-		})
-	}*/
 
 	Ladda.bind('.btn-download', { timeout: 2000 } );
 	Ladda.bind('.btn-download', {
@@ -155,21 +116,5 @@
 			}, 200 );
 		}
 	});
-
-	/*Ladda.bind('.btn-upload', { timeout: 2000 } );
-	Ladda.bind('.btn-upload', {
-		callback: function( instance ) {
-			var progress = 0;
-			var interval = setInterval( function() {
-				progress = Math.min( progress + Math.random() * 0.1, 1 );
-				instance.setProgress( progress );
-				if( progress === 1 ) {
-					instance.stop();
-					clearInterval( interval );
-				}
-			}, 200 );
-		}
-	});*/
-
 	
 </script>

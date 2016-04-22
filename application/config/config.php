@@ -519,7 +519,7 @@ $config['path_temps'] = 'temps/';
 $config['unzip_ext'] = array('css', 'js', 'png', 'gif', 'jpeg', 'jpg', 'tpl', 'html', 'swf');
 
 $config['filter'] = '';
-$config['limit'] = '10';
+$config['limit'] = '20';
 $config['order'] = '';
 $config['offset'] = '';
 

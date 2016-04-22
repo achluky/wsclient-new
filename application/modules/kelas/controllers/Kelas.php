@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * WS Client Feeder Kelas Module
  * 
- * @author 		Yusuf Ayuba
+ * @author 		Yusuf Ayuba modified by @ahmadluky
  * @copyright   2015
  * @link        http://jago.link
  * @package     https://github.com/virbo/wsfeeder
@@ -36,9 +36,9 @@ class Kelas extends CI_Controller {
 			$this->filter = $this->config->item('filter');
 			$this->order = $this->config->item('order');
 			$this->offset = $this->config->item('offset');
-			$this->table1 = 'kelas_kuliah';
-			$this->table2 = 'nilai';
-			$this->table3 = 'ajar_dosen';
+			$this->table1 = 'kelas_kuliah.raw';
+			$this->table2 = 'nilai.raw';
+			$this->table3 = 'ajar_dosen.raw';
 			$this->load->model('m_feeder','feeder');
 			$this->load->helper('csv');
 			$this->load->library('excel');
@@ -71,6 +71,7 @@ class Kelas extends CI_Controller {
 	public function kelas()
 	{
 		$temp_rec = $this->feeder->getrecord($this->session->userdata('token'), $this->table1, $this->filter);
+		$temp_sms = $this->feeder->getrset($this->session->userdata('token'), 'sms', 'id_sp=\'e1788280-0134-4b88-992b-d7184be667b9\'', $this->order, $this->limit, $this->offset);
 		$temp_sp = $this->session->userdata('id_sp');
 		if (($temp_rec['error_desc']=='') && ($temp_sp=='') ){
 			$this->session->set_flashdata('error','Kode PT Anda tidak ditemukan, silahkan masukkan kode PT anda dengan benar');
@@ -79,6 +80,7 @@ class Kelas extends CI_Controller {
 		
 		$data['error_code'] = $temp_rec['error_code'];
 		$data['error_desc'] = $temp_rec['error_desc'];
+		$data['program_studi'] = $temp_sms['result'];
 		$data['site_title'] = 'Kelas/Nilai Perkuliahan';
 		$data['title_page'] = 'Kelas/Nilai Perkuliahan';
 		$data['ket_page'] = 'Menyimpan jadwal/nilai perkuliahan yang di buka, dosen pengajar, serta peserta kelas / KRS mahasiswa setiap periode';
@@ -99,222 +101,229 @@ class Kelas extends CI_Controller {
 	public function createexcel()
 	{
 		$this->benchmark->mark('mulai');
-		if (!file_exists($this->template)) {
-			echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>File template tidak tersedia.</div>";
+		$p = $this->input->get('p');
+		if($p==""){
+			echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4> Nama Prodi Harus Dipilih.</div>";
 		} else {
-			$data1 = array(array('kode_mk' => 'WS123',
-						'mata_kuliah' => 'Mata Kuliah 1',
-						'semester' => '20142',
-						'kelas' => '01',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					),
-				  array('kode_mk' => 'WS456',
-						'mata_kuliah' => 'Mata Kuliah 2',
-						'semester' => '20142',
-						'kelas' => '02',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					),
-				  array('kode_mk' => 'WS789',
-						'mata_kuliah' => 'Mata Kuliah 3',
-						'semester' => '20142',
-						'kelas' => '01',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					)
-				);
-			$data2 = array(array('nim' => '12345',
-						'nama' => 'Mahasiswa 1',
-						'kode_mk' => 'WS123',
-						'mata_kuliah' => 'Mata Kuliah 1',
-						'kelas' => '01',
-						'semester' => '20142',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					),
-				  array('nim' => '45678',
-						'nama' => 'Mahasiswa 2',
-						'kode_mk' => 'WS456',
-						'mata_kuliah' => 'Mata Kuliah 2',
-						'kelas' => '02',
-						'semester' => '20142',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					),
-				  array('nim' => '6789',
-						'nama' => 'Mahasiswa 3',
-						'kode_mk' => 'WS789',
-						'mata_kuliah' => 'Mata Kuliah 3',
-						'kelas' => '01',
-						'semester' => '20142',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					)
-				);
-			$data3 = array(array('nidn' => '12345',
-						'dosen' => 'Dosen 1',
-						'kode_mk' => 'WS123',
-						'mata_kuliah' => 'Mata Kuliah 1',
-						'kelas' => '01',
-						'rencana_tm' => '16',
-						'real_tm' => '16',
-						'semester' => '20142',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					),
-				  array('nidn' => '34567',
-						'dosen' => 'Dosen 2',
-						'kode_mk' => 'WS456',
-						'mata_kuliah' => 'Mata Kuliah 2',
-						'kelas' => '02',
-						'rencana_tm' => '16',
-						'real_tm' => '16',
-						'semester' => '20142',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					),
-				  array('nidn' => '56789',
-						'dosen' => 'Dosen 3',
-						'kode_mk' => 'WS789',
-						'mata_kuliah' => 'Mata Kuliah 3',
-						'kelas' => '01',
-						'rencana_tm' => '16',
-						'real_tm' => '16',
-						'semester' => '20142',
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					)
-				);
-			$data4 = array(array('nim' => '12345',
-						'nama' => 'Mahasiswa 1',
-						'kode_mk' => 'WS123',
-						'mata_kuliah' => 'Mata Kuliah 1',
-						'semester' => '20142',
-						'kelas' => '01',
-						'nilai_angka' => 80,
-						'nilai_huruf' => 'A',
-						'nilai_indeks' => 4,
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					),
-				  array('nim' => '23456',
-						'nama' => 'Mahasiswa 2',
-						'kode_mk' => 'WS456',
-						'mata_kuliah' => 'Mata Kuliah 2',
-						'semester' => '20142',
-						'kelas' => '01',
-						'nilai_angka' => 60,
-						'nilai_huruf' => 'C',
-						'nilai_indeks' => 2,
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					),
-				  array('nim' => '34567',
-						'nama' => 'Mahasiswa 3',
-						'kode_mk' => 'WS789',
-						'mata_kuliah' => 'Mata Kuliah 3',
-						'semester' => '20142',
-						'kelas' => '01',
-						'nilai_angka' => 75,
-						'nilai_huruf' => 'B',
-						'nilai_indeks' => 3,
-						'kode_prodi' => 14401,
-						'nama_prodi' => 'Keperawatan'
-					)
-				);
-			$objPHPExcel = PHPExcel_IOFactory::load($this->template);
 
-			//SET SHEET Kelas
-			$objPHPExcel->setActiveSheetIndex(0);
-			$baseRow = 3;
-			foreach($data1 as $r => $dataRow) {
-				$row = $baseRow + $r;
-				$objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
-				$objPHPExcel->getActiveSheet()->setCellValue('A'.$row, $r+1)
-									->setCellValue('B'.$row, $dataRow['kode_mk'])
-									->setCellValue('C'.$row, $dataRow['mata_kuliah'])
-									->setCellValue('D'.$row, $dataRow['semester'])
-									->setCellValue('E'.$row, $dataRow['kelas'])
-									->setCellValue('F'.$row, $dataRow['kode_prodi'])
-									->setCellValue('G'.$row, $dataRow['nama_prodi']);
-			}
-			$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
+			$prodi = explode('|', $this->input->get('p')); 
 
-			//SET SHEET krs
-			$objPHPExcel->setActiveSheetIndex(1);
-			$baseRow2 = 3;
-			foreach($data2 as $r2 => $dataRow2) {
-				$row2 = $baseRow2 + $r2;
-				$objPHPExcel->getActiveSheet()->insertNewRowBefore($row2,1);
-				$objPHPExcel->getActiveSheet()->setCellValue('A'.$row2, $r2+1)
-									->setCellValue('B'.$row2, $dataRow2['nim'])
-									->setCellValue('C'.$row2, $dataRow2['nama'])
-									->setCellValue('D'.$row2, $dataRow2['kode_mk'])
-									->setCellValue('E'.$row2, $dataRow2['mata_kuliah'])
-									->setCellValue('F'.$row2, $dataRow2['kelas'])
-									->setCellValue('G'.$row2, $dataRow2['semester'])
-									->setCellValue('H'.$row2, $dataRow2['kode_prodi'])
-									->setCellValue('I'.$row2, $dataRow2['nama_prodi']);
-			}
-			$objPHPExcel->getActiveSheet()->removeRow($baseRow2-1,1);
-
-			//SET SHEET dosen
-			$objPHPExcel->setActiveSheetIndex(2);
-			$baseRow3 = 3;
-			foreach($data3 as $r3 => $dataRow3) {
-				$row3 = $baseRow3 + $r3;
-				$objPHPExcel->getActiveSheet()->insertNewRowBefore($row3,1);
-				$objPHPExcel->getActiveSheet()->setCellValue('A'.$row3, $r3+1)
-									->setCellValue('B'.$row3, $dataRow3['nidn'])
-									->setCellValue('C'.$row3, $dataRow3['dosen'])
-									->setCellValue('D'.$row3, $dataRow3['kode_mk'])
-									->setCellValue('E'.$row3, $dataRow3['mata_kuliah'])
-									->setCellValue('F'.$row3, $dataRow3['kelas'])
-									->setCellValue('G'.$row3, $dataRow3['rencana_tm'])
-									->setCellValue('H'.$row3, $dataRow3['real_tm'])
-									->setCellValue('I'.$row3, $dataRow3['semester'])
-									->setCellValue('J'.$row3, $dataRow3['kode_prodi'])
-									->setCellValue('K'.$row3, $dataRow3['nama_prodi']);
-			}
-			$objPHPExcel->getActiveSheet()->removeRow($baseRow3-1,1);
-
-			//SET SHEET Nilai
-			$objPHPExcel->setActiveSheetIndex(3);
-			$baseRow4 = 3;
-			foreach($data4 as $r4 => $dataRow4) {
-				$row4 = $baseRow4 + $r4;
-				$objPHPExcel->getActiveSheet()->insertNewRowBefore($row4,1);
-				$objPHPExcel->getActiveSheet()->setCellValue('A'.$row4, $r4+1)
-									->setCellValue('B'.$row4, $dataRow4['nim'])
-									->setCellValue('C'.$row4, $dataRow4['nama'])
-									->setCellValue('D'.$row4, $dataRow4['kode_mk'])
-									->setCellValue('E'.$row4, $dataRow4['mata_kuliah'])
-									->setCellValue('F'.$row4, $dataRow4['semester'])
-									->setCellValue('G'.$row4, $dataRow4['kelas'])
-									->setCellValue('H'.$row4, $dataRow4['nilai_angka'])
-									->setCellValue('I'.$row4, $dataRow4['nilai_huruf'])
-									->setCellValue('J'.$row4, $dataRow4['nilai_indeks'])
-									->setCellValue('K'.$row4, $dataRow4['kode_prodi'])
-									->setCellValue('L'.$row4, $dataRow4['nama_prodi']);
-			}
-			$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
-
-			$filename = time().'-template-kelas.xlsx';
-
-			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-			//$objWriter->save('php://output');
-			$temp_tulis = $objWriter->save('temps/'.$filename);
-			$this->benchmark->mark('selesai');
-			$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
-			if ($temp_tulis==NULL) {
-				echo "<div class=\"bs-callout bs-callout-success\">
-						File berhasil digenerate dalam waktu <strong>".$time_eks." detik</strong>. <br />Klik <a href=\"".base_url()."index.php/file/download/".$filename."\">disini</a> untuk download file
-					</div>";
+			if (!file_exists($this->template)) {
+				echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>File template tidak tersedia.</div>";
 			} else {
-				echo "<div class=\"bs-callout bs-callout-danger\">
-						<h4>Error</h4>File tidak bisa digenerate. Folder 'temps' tidak ada atau tidak bisa ditulisi.
-					</div>";
+				$data1 = array(array('kode_mk' => 'WS123',
+							'mata_kuliah' => 'Mata Kuliah 1',
+							'semester' => '20142',
+							'kelas' => '01',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						),
+					  array('kode_mk' => 'WS456',
+							'mata_kuliah' => 'Mata Kuliah 2',
+							'semester' => '20142',
+							'kelas' => '02',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						),
+					  array('kode_mk' => 'WS789',
+							'mata_kuliah' => 'Mata Kuliah 3',
+							'semester' => '20142',
+							'kelas' => '01',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						)
+					);
+				$data2 = array(array('nim' => '12345',
+							'nama' => 'Mahasiswa 1',
+							'kode_mk' => 'WS123',
+							'mata_kuliah' => 'Mata Kuliah 1',
+							'kelas' => '01',
+							'semester' => '20142',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						),
+					  array('nim' => '45678',
+							'nama' => 'Mahasiswa 2',
+							'kode_mk' => 'WS456',
+							'mata_kuliah' => 'Mata Kuliah 2',
+							'kelas' => '02',
+							'semester' => '20142',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						),
+					  array('nim' => '6789',
+							'nama' => 'Mahasiswa 3',
+							'kode_mk' => 'WS789',
+							'mata_kuliah' => 'Mata Kuliah 3',
+							'kelas' => '01',
+							'semester' => '20142',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						)
+					);
+				$data3 = array(array('nidn' => '12345',
+							'dosen' => 'Dosen 1',
+							'kode_mk' => 'WS123',
+							'mata_kuliah' => 'Mata Kuliah 1',
+							'kelas' => '01',
+							'rencana_tm' => '16',
+							'real_tm' => '16',
+							'semester' => '20142',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						),
+					  array('nidn' => '34567',
+							'dosen' => 'Dosen 2',
+							'kode_mk' => 'WS456',
+							'mata_kuliah' => 'Mata Kuliah 2',
+							'kelas' => '02',
+							'rencana_tm' => '16',
+							'real_tm' => '16',
+							'semester' => '20142',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						),
+					  array('nidn' => '56789',
+							'dosen' => 'Dosen 3',
+							'kode_mk' => 'WS789',
+							'mata_kuliah' => 'Mata Kuliah 3',
+							'kelas' => '01',
+							'rencana_tm' => '16',
+							'real_tm' => '16',
+							'semester' => '20142',
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						)
+					);
+				$data4 = array(array('nim' => '12345',
+							'nama' => 'Mahasiswa 1',
+							'kode_mk' => 'WS123',
+							'mata_kuliah' => 'Mata Kuliah 1',
+							'semester' => '20142',
+							'kelas' => '01',
+							'nilai_angka' => 80,
+							'nilai_huruf' => 'A',
+							'nilai_indeks' => 4,
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						),
+					  array('nim' => '23456',
+							'nama' => 'Mahasiswa 2',
+							'kode_mk' => 'WS456',
+							'mata_kuliah' => 'Mata Kuliah 2',
+							'semester' => '20142',
+							'kelas' => '01',
+							'nilai_angka' => 60,
+							'nilai_huruf' => 'C',
+							'nilai_indeks' => 2,
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						),
+					  array('nim' => '34567',
+							'nama' => 'Mahasiswa 3',
+							'kode_mk' => 'WS789',
+							'mata_kuliah' => 'Mata Kuliah 3',
+							'semester' => '20142',
+							'kelas' => '01',
+							'nilai_angka' => 75,
+							'nilai_huruf' => 'B',
+							'nilai_indeks' => 3,
+							'id_sms' => $prodi[0],
+							'jenjang_pendidikan' => $prodi[1]
+						)
+					);
+				$objPHPExcel = PHPExcel_IOFactory::load($this->template);
+				//SET SHEET Kelas
+				$objPHPExcel->setActiveSheetIndex(0);
+				$baseRow = 3;
+				foreach($data1 as $r => $dataRow) {
+					$row = $baseRow + $r;
+					$objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+					$objPHPExcel->getActiveSheet()->setCellValue('A'.$row, $r+1)
+										->setCellValue('B'.$row, $dataRow['kode_mk'])
+										->setCellValue('C'.$row, $dataRow['mata_kuliah'])
+										->setCellValue('D'.$row, $dataRow['semester'])
+										->setCellValue('E'.$row, $dataRow['kelas'])
+										->setCellValue('F'.$row, $dataRow['id_sms'])
+										->setCellValue('G'.$row, $dataRow['jenjang_pendidikan']);
+				}
+				$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
+
+				//SET SHEET krs
+				$objPHPExcel->setActiveSheetIndex(1);
+				$baseRow2 = 3;
+				foreach($data2 as $r2 => $dataRow2) {
+					$row2 = $baseRow2 + $r2;
+					$objPHPExcel->getActiveSheet()->insertNewRowBefore($row2,1);
+					$objPHPExcel->getActiveSheet()->setCellValue('A'.$row2, $r2+1)
+										->setCellValue('B'.$row2, $dataRow2['nim'])
+										->setCellValue('C'.$row2, $dataRow2['nama'])
+										->setCellValue('D'.$row2, $dataRow2['kode_mk'])
+										->setCellValue('E'.$row2, $dataRow2['mata_kuliah'])
+										->setCellValue('F'.$row2, $dataRow2['kelas'])
+										->setCellValue('G'.$row2, $dataRow2['semester'])
+										->setCellValue('H'.$row2, $dataRow2['id_sms'])
+										->setCellValue('I'.$row2, $dataRow2['jenjang_pendidikan']);
+				}
+				$objPHPExcel->getActiveSheet()->removeRow($baseRow2-1,1);
+
+				//SET SHEET dosen
+				$objPHPExcel->setActiveSheetIndex(2);
+				$baseRow3 = 3;
+				foreach($data3 as $r3 => $dataRow3) {
+					$row3 = $baseRow3 + $r3;
+					$objPHPExcel->getActiveSheet()->insertNewRowBefore($row3,1);
+					$objPHPExcel->getActiveSheet()->setCellValue('A'.$row3, $r3+1)
+										->setCellValue('B'.$row3, $dataRow3['nidn'])
+										->setCellValue('C'.$row3, $dataRow3['dosen'])
+										->setCellValue('D'.$row3, $dataRow3['kode_mk'])
+										->setCellValue('E'.$row3, $dataRow3['mata_kuliah'])
+										->setCellValue('F'.$row3, $dataRow3['kelas'])
+										->setCellValue('G'.$row3, $dataRow3['rencana_tm'])
+										->setCellValue('H'.$row3, $dataRow3['real_tm'])
+										->setCellValue('I'.$row3, $dataRow3['semester'])
+										->setCellValue('J'.$row3, $dataRow3['id_sms'])
+										->setCellValue('K'.$row3, $dataRow3['jenjang_pendidikan']);
+				}
+				$objPHPExcel->getActiveSheet()->removeRow($baseRow3-1,1);
+
+				//SET SHEET Nilai
+				$objPHPExcel->setActiveSheetIndex(3);
+				$baseRow4 = 3;
+				foreach($data4 as $r4 => $dataRow4) {
+					$row4 = $baseRow4 + $r4;
+					$objPHPExcel->getActiveSheet()->insertNewRowBefore($row4,1);
+					$objPHPExcel->getActiveSheet()->setCellValue('A'.$row4, $r4+1)
+										->setCellValue('B'.$row4, $dataRow4['nim'])
+										->setCellValue('C'.$row4, $dataRow4['nama'])
+										->setCellValue('D'.$row4, $dataRow4['kode_mk'])
+										->setCellValue('E'.$row4, $dataRow4['mata_kuliah'])
+										->setCellValue('F'.$row4, $dataRow4['semester'])
+										->setCellValue('G'.$row4, $dataRow4['kelas'])
+										->setCellValue('H'.$row4, $dataRow4['nilai_angka'])
+										->setCellValue('I'.$row4, $dataRow4['nilai_huruf'])
+										->setCellValue('J'.$row4, $dataRow4['nilai_indeks'])
+										->setCellValue('K'.$row4, $dataRow4['id_sms'])
+										->setCellValue('L'.$row4, $dataRow4['jenjang_pendidikan']);
+				}
+				$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
+
+				$filename = time().'-template-kelas.xlsx';
+
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				//$objWriter->save('php://output');
+				$temp_tulis = $objWriter->save('temps/'.$filename);
+				$this->benchmark->mark('selesai');
+				$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
+				if ($temp_tulis==NULL) {
+					echo "<div class=\"bs-callout bs-callout-success\">
+							File berhasil digenerate dalam waktu <strong>".$time_eks." detik</strong>. <br />Klik <a href=\"".base_url()."index.php/file/download/".$filename."\">disini</a> untuk download file
+						</div>";
+				} else {
+					echo "<div class=\"bs-callout bs-callout-danger\">
+							<h4>Error</h4>File tidak bisa digenerate. Folder 'temps' tidak ada atau tidak bisa ditulisi.
+						</div>";
+				}
 			}
 		}
 	}
@@ -327,29 +336,26 @@ class Kelas extends CI_Controller {
 		} else {
 			$mode = $this->input->post('mode');
 			$file_data = $this->upload->data();
-			//var_dump($file_data);
 			$file_path = $this->config->item('upload_path').$file_data['file_name'];
-			//var_dump($file_path);
 			$objPHPExcel = PHPExcel_IOFactory::load($file_path);
 			switch ($mode) {
 				case 0: //Kelas kuliah
 					$objPHPExcel->setActiveSheetIndex(0);
 					$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
 					$jml_row = $objPHPExcel->getActiveSheet()->getHighestRow()-1;
-					//var_dump($cell_collection);
-					foreach ($cell_collection as $cell) {
+					foreach ($cell_collection as $cell) 
+					{
 						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
 						$data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
-						
 						if ($row == 1) {
 							$header[$row][$column] = $data_value;
 						} else {
 							$arr_data[$row][$column] = $data_value;
 						}
 					}
-					//var_dump($arr_data);
-					if ($arr_data) {
+					if ($arr_data) 
+					{
 						$id_sms = '';
 						$id_mk = '';
 						$sks_mk = '';
@@ -362,19 +368,23 @@ class Kelas extends CI_Controller {
 						$error_count = 0;
 						$error_msg = array();
 						$sukses_msg = array();
-						foreach ($arr_data as $key => $value) {
+						foreach ($arr_data as $key => $value) 
+						{
 							$kode_mk = $value['B'];
 							$nm_mk = $value['C'];
 							$semester = trim($value['D']);
 							$kelas = $value['E'];
 							$kode_prodi = trim($value['F']);
 
+							/**
 							$filter_sms = "id_sp='".$this->session->userdata('id_sp')."' AND kode_prodi='".$kode_prodi."'";
 							$temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'sms',$filter_sms);
 							if ($temp_sms['result']) {
 								$id_sms = $temp_sms['result']['id_sms'];
 							}
-							
+							**/
+
+							$id_sms = $value['G'];
 							$filter_mk = "kode_mk='".$kode_mk."' AND id_sms='".$id_sms."'";
 							$temp_mk = $this->feeder->getrecord($this->session->userdata('token'),'mata_kuliah',$filter_mk);
 							if ($temp_mk['result']) {
@@ -396,7 +406,7 @@ class Kelas extends CI_Controller {
 							$temp_data['sks_sim'] = $sks_sim;
 
 							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], $this->table1, $temp_data);
-							//var_dump($temp_result);
+
 							if ($temp_result['result']) {
 								if ($temp_result['result']['error_desc']==NULL) {
 									++$sukses_count;
@@ -406,7 +416,6 @@ class Kelas extends CI_Controller {
 									$error_msg[] = "<h4>Error ".$temp_result['result']['error_code']." (".$kode_mk." - ".$nm_mk.")</h4>".$temp_result['result']['error_desc'];
 								}
 							} else {
-								//echo "<div class=\"alert alert-danger\" role=\"alert\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div>";
 								echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
 								break;
 							}
@@ -421,9 +430,9 @@ class Kelas extends CI_Controller {
 										echo "<a data-toggle=\"collapse\" href=\"#cols_sukses\" aria-expanded=\"false\" aria-controls=\"cols_sukses\"> Detail</a><br />";
 									} else { echo "<br />"; }
 									echo "<div class=\"collapse\" id=\"cols_sukses\">";
-											foreach ($sukses_msg as $pesan_sukses) {
-												echo "<div class=\"bs-callout bs-callout-success\">".$pesan_sukses."</div><br />";
-											}
+									foreach ($sukses_msg as $pesan_sukses) {
+										echo "<div class=\"bs-callout bs-callout-success\">".$pesan_sukses."</div><br />";
+									}
 									echo "</div>";
 
 							echo "<font color=\"#ce4844\" >".$error_count." data tidak bisa ditambahkan </font>";
@@ -431,10 +440,10 @@ class Kelas extends CI_Controller {
 										echo "<a data-toggle=\"collapse\" href=\"#cols_error\" aria-expanded=\"false\" aria-controls=\"cols_error\">Detail error</a>";
 									}
 									echo "<div class=\"collapse\" id=\"cols_error\">";
-													foreach ($error_msg as $pesan) {
-															echo "<div class=\"bs-callout bs-callout-danger\">".$pesan."</div><br />";
-														}
-											echo "</div>";
+									foreach ($error_msg as $pesan) {
+										echo "<div class=\"bs-callout bs-callout-danger\">".$pesan."</div><br />";
+									}	
+									echo "</div>";
 						}
 					} else {
 						echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>Tidak dapat mengekstrak file.. Silahkan dicoba kembali</div>";
@@ -444,7 +453,6 @@ class Kelas extends CI_Controller {
 					$objPHPExcel->setActiveSheetIndex(1);
 					$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
 					$jml_row = $objPHPExcel->getActiveSheet()->getHighestRow()-1;
-					//var_dump($cell_collection);
 					foreach ($cell_collection as $cell) {
 						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
@@ -456,7 +464,6 @@ class Kelas extends CI_Controller {
 							$arr_data[$row][$column] = $data_value;
 						}
 					}
-					//var_dump($arr_data);
 					if ($arr_data) {
 						$id_mk = '';
 						$id_kls = '';
@@ -475,21 +482,27 @@ class Kelas extends CI_Controller {
 							$nm_mk = $value['E'];
 							$kelas = $value['F'];
 							$semester = $value['G'];
-							$kode_prodi = $value['H'];
+							$jenjang_pendidikan = $value['H'];
+							$id_sms = $value['I'];
 
-							$filter_kls = "nm_kls='".$kelas."'";
-							$temp_kls = $this->feeder->getrset($this->session->userdata('token'),$this->table1,$filter_kls,strpost($this->session->userdata('id_sp'),$kode_prodi,$kode_mk,$kelas,$semester,$nim),'','');
-							if ($temp_kls['result']) {
-								foreach ($temp_kls['result'] as $row) {
-									$id_kls = $row['id_kls'];
-									$id_reg_pd = $row['id_reg_pd'];
-								}
-							}
-							$temp_data['id_kls'] = $id_kls;
-							$temp_data['id_reg_pd'] = $id_reg_pd;
+							$filter = "id_sms='".$id_sms."' and id_jenj_didik='".$jenjang_pendidikan."' and kode_mk='".$kode_mk."'";
+							$temp_mk = $this->feeder->getrecord($this->session->userdata('token'),'mata_kuliah',$filter);
+							$id_mk = $temp_mk['result']['id_mk'];
+
+							$filter_kls = "nm_kls='".$kelas."' and id_smt='".$semester."' and id_sms='".$id_sms."' and id_mk='".$id_mk."'";
+							$temp_kls = $this->feeder->getrecord($this->session->userdata('token'),$this->table1,$filter_kls,'','','');
+							$id_kls = $temp_kls['result']['id_kls'];
+
+							$filter_mhspt = "nipd='".$nim."'";
+							$temp_mhspt = $this->feeder->getrecord($this->session->userdata('token'),'mahasiswa_pt',$filter_mhspt,'','','');
+							$id_reg_pd = $temp_mhspt['result']['id_reg_pd'];
+
+							$temp_data['id_kls'] = $id_kls; //kelas kuliah
+							$temp_data['id_reg_pd'] = $id_reg_pd; //mahasiswa_pt
 							$temp_data['asal_data'] = 9;
-							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], $this->table2, $temp_data);
-							//var_dump($temp_result);
+
+
+							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], 'nilai', $temp_data); //nilai
 							if ($temp_result['result']) {
 								if ($temp_result['result']['error_desc']==NULL) {
 									++$sukses_count;
@@ -499,7 +512,6 @@ class Kelas extends CI_Controller {
 									$error_msg[] = "<h4>Error ".$temp_result['result']['error_code']." (".$nm_mhs." / ".$nm_mk.")</h4>".$temp_result['result']['error_desc'];
 								}
 							} else {
-								//echo "<div class=\"alert alert-danger\" role=\"alert\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div>";
 								echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
 								break;
 							}
@@ -537,7 +549,6 @@ class Kelas extends CI_Controller {
 					$objPHPExcel->setActiveSheetIndex(2);
 					$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
 					$jml_row = $objPHPExcel->getActiveSheet()->getHighestRow()-1;
-					//var_dump($cell_collection);
 					foreach ($cell_collection as $cell) {
 						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
@@ -549,7 +560,6 @@ class Kelas extends CI_Controller {
 							$arr_data[$row][$column] = $data_value;
 						}
 					}
-					//var_dump($arr_data);
 					if ($arr_data) {
 						$temp_nidn = '';
 						$id_reg_ptk = '';
@@ -572,26 +582,17 @@ class Kelas extends CI_Controller {
 							$ren_tm = $value['G'];
 							$rel_tm = $value['H'];
 							$semester = $value['I'];
-							$kode_prodi = $value['J'];
+							$jenjang_pendidikan = $value['J'];
+							$id_sms = $value['K'];
 
 							$filter_nidn = "nidn='".$nidn."'";
 							$temp_nidn = $this->feeder->getrecord($this->session->userdata('token'),'dosen',$filter_nidn);
 							if ($temp_nidn['result']) {
-								//$id_ptk = $temp_nidn['result']['id_ptk'];
 								$filter_ptk = "p.id_ptk='".$temp_nidn['result']['id_ptk']."' AND p.id_sp='".$this->session->userdata('id_sp')."'";
 							}
-							//$tot_nidn = count($temp_nidn['result']);
-							//$filter_ptk = "p.id_ptk='".$temp_nidn['result']['id_ptk']."' AND p.id_sp='".$this->session->userdata('id_sp')."'";
 							$temp_ptk = $this->feeder->getrecord($this->session->userdata('token'),'dosen_pt',$filter_ptk);
 							if ($temp_ptk['result']) {
 								$id_reg_ptk = $temp_ptk['result']['id_reg_ptk'];
-							}
-
-							//Filter prodi
-							$filter_sms = "id_sp='".$this->session->userdata('id_sp')."' AND kode_prodi='".$kode_prodi."'";
-							$temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'sms',$filter_sms);
-							if ($temp_sms['result']) {
-								$id_sms = $temp_sms['result']['id_sms'];
 							}
 
 							$filter_mk = "kode_mk='".$kode_mk."' AND id_sms='".$id_sms."'";
@@ -599,7 +600,6 @@ class Kelas extends CI_Controller {
 							if ($temp_mk['result']) {
 								$id_mk = $temp_mk['result']['id_mk'];
 							}
-							//var_dump($id_mk);
 
 							//Filter kelas kuliah
 							$filter_kls = "p.id_mk='".$id_mk."' AND nm_kls='".$kelas."' AND p.id_smt='".$semester."'";
@@ -607,6 +607,7 @@ class Kelas extends CI_Controller {
 							if ($temp_kls['result']) {
 								$id_kls = $temp_kls['result']['id_kls'];
 							}
+
 							$temp_data['id_reg_ptk'] = $id_reg_ptk;
 							$temp_data['id_kls'] = $id_kls;
 							$temp_data['sks_subst_tot'] = 0;
@@ -617,7 +618,8 @@ class Kelas extends CI_Controller {
 							$temp_data['jml_tm_renc'] = $ren_tm;
 							$temp_data['jml_tm_real'] = $rel_tm;
 							$temp_data['id_jns_eval'] = 1;
-							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], $this->table3, $temp_data);
+
+							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], 'ajar_dosen', $temp_data); // ajar_dosen
 							if ($temp_result['result']) {
 								if ($temp_result['result']['error_desc']==NULL) {
 									++$sukses_count;
@@ -627,7 +629,6 @@ class Kelas extends CI_Controller {
 									$error_msg[] = "<h4>Error ".$temp_result['result']['error_code']." (".$nm_dosen." / ".$nm_mk.")</h4>".$temp_result['result']['error_desc'];
 								}
 							} else {
-								//echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
 								echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
 								break;
 							}
@@ -664,7 +665,6 @@ class Kelas extends CI_Controller {
 				case 3: //Nilai
 					$objPHPExcel->setActiveSheetIndex(3);
 					$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
-					//var_dump($cell_collection);
 					foreach ($cell_collection as $cell) {
 						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
@@ -676,7 +676,6 @@ class Kelas extends CI_Controller {
 							$arr_data[$row][$column] = $data_value;
 						}
 					}
-					//var_dump($arr_data);
 					if ($arr_data) {
 						$id_mk = '';
 						$id_sms = '';
@@ -696,13 +695,8 @@ class Kelas extends CI_Controller {
 							$kode_mk = $value['D'];
 							$smt = $value['F'];
 							$kls = $value['G'];
-							$kode_prodi = $value['K'];
-
-							$filter_sms = "id_sp='".$this->session->userdata('id_sp')."' AND kode_prodi='".$kode_prodi."'";
-							$temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'sms',$filter_sms);
-							if ($temp_sms['result']) {
-								$id_sms = $temp_sms['result']['id_sms'];
-							}
+							$jenjang_pendidikan = $value['K'];
+							$id_sms = $value['L'];
 
 							$filter_mk = "kode_mk='".$kode_mk."' AND id_sms='".$id_sms."'";
 							$temp_mk = $this->feeder->getrecord($this->session->userdata('token'),'mata_kuliah',$filter_mk);
@@ -724,22 +718,22 @@ class Kelas extends CI_Controller {
 							}
 
 							//inisial data
-							$temp_key = array('id_kls' => $id_kls,
-													'id_reg_pd' => $id_reg_pd
-											);
-							$temp_data = array('nilai_angka' => $value['H'],
+							$temp_key = array(	
+												'id_kls' => $id_kls,
+												'id_reg_pd' => $id_reg_pd
+											 );
+							$temp_data = array(
+												'nilai_angka' => $value['H'],
 												'nilai_huruf' => $value['I'],
 												'nilai_indeks' => $value['J']
-											);
+											 );
 							$array[] = array('key'=>$temp_key,'data'=>$temp_data);
 						}
-						//var_dump($array);
-						$temp_result = $this->feeder->updaterset($this->session->userdata('token'),$this->table2,$array);
-						//var_dump($temp_result);
+						
+						$temp_result = $this->feeder->updaterset($this->session->userdata('token'),'nilai',$array);
 
 						$this->benchmark->mark('selesai');
 						$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
-						//var_dump($temp_result);
 						$i=0;
 						if ($temp_result['result']) {
 							foreach ($temp_result['result'] as $key) {
@@ -752,12 +746,8 @@ class Kelas extends CI_Controller {
 								}
 							}
 						} else {
-							/*echo "<div class=\"alert alert-danger\" role=\"alert\">
-								<h4>Error</h4>";
-								echo $temp_result['error_desc']."</div>";*/
-								echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
+							echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
 						}
-						
 
 						if ((!$sukses_count==0) || (!$error_count==0)) {
 							echo "<div class=\"alert alert-warning\" role=\"alert\">
@@ -767,7 +757,6 @@ class Kelas extends CI_Controller {
 									if (!$error_count==0) {
 										echo "<a data-toggle=\"collapse\" href=\"#collapseExample\" aria-expanded=\"false\" aria-controls=\"collapseExample\">Detail error</a>";
 									}
-									//echo "<br />Total: ".$i." baris data";
 									echo "<div class=\"collapse\" id=\"collapseExample\">";
 											foreach ($error_msg as $pesan) {
 													echo "<div class=\"bs-callout bs-callout-danger\">".$pesan."</div><br />";
@@ -778,7 +767,6 @@ class Kelas extends CI_Controller {
 					} else {
 						echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>Tidak dapat mengekstrak file.. Silahkan dicoba kembali</div>";
 					}
-					//echo "Nilai";
 					break;
 			}
 		}
@@ -788,11 +776,7 @@ class Kelas extends CI_Controller {
 	{
 		$search = $this->input->post('search');
 		$sSearch = trim($search['value']);
-
-		//$Data = $this->input->get('columns');
 		$orders = $this->input->post('order');
-		//$temp_order = 
-
 		$iStart = $this->input->post('start');
 		$iLength = $this->input->post('length');
 
@@ -804,18 +788,22 @@ class Kelas extends CI_Controller {
 		if (!empty($sSearch)) {
 			$temp_filter = "nm_mk like '%".$sSearch."%' OR nm_smt like '%".$sSearch."%'";
 			$temp_rec = $this->feeder->getrset($this->session->userdata('token'),
-												$this->table1, $temp_filter, 
-												'id_smt DESC', $temp_limit,$temp_offset
-								);
-			//var_dump($temp_rec);
+												$this->table1, 
+												$temp_filter, 
+												'id_smt DESC', 
+												$temp_limit,
+												$temp_offset
+												);
 			$__total = $this->feeder->count_all($this->session->userdata('token'),$this->table1,$temp_filter);
 			$totalFiltered = $__total['result'];
 		} else {
 			$temp_rec = $this->feeder->getrset($this->session->userdata('token'),
-												$this->table1, $this->filter, 
-												'id_smt DESC', $temp_limit,$temp_offset
-								);
-			//var_dump($temp_rec['result']);
+												$this->table1, 
+												$this->filter, 
+												'id_smt DESC', 
+												$temp_limit,
+												$temp_offset
+												);
 		}
 		//var_dump($temp_rec);
 		$temp_error_code = $temp_rec['error_code'];
@@ -830,11 +818,9 @@ class Kelas extends CI_Controller {
 				$temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'sms',$filter_sms);
 				$filter_jenjang = "id_jenj_didik = ".$temp_sms['result']['id_jenj_didik'];
 				$temp_jenjang = $this->feeder->getrecord($this->session->userdata('token'),'jenjang_pendidikan',$filter_jenjang);
-				//var_dump($temp_jenjang);
 
 				$filter_kodemk = "id_mk = '".$key['id_mk']."' AND id_sms='".$key['id_sms']."'";
 				$temp_kodemk = $this->feeder->getrecord($this->session->userdata('token'),'mata_kuliah',$filter_kodemk);
-				//var_dump($temp_kodemk['result']);
 
 				$filter_kls = "p.id_kls = '".$key['id_kls']."'";
 				$count_klsmhs = $this->feeder->count_all($this->session->userdata('token'),$this->table2,$filter_kls);
@@ -844,9 +830,9 @@ class Kelas extends CI_Controller {
 
 				$temps[] = ++$i+$temp_offset;
 				$temps[] = $temp_jenjang['result']['nm_jenj_didik'].' '.$temp_sms['result']['nm_lemb'];
-				$temps[] = $key['fk__id_smt'];
+				$temps[] = $key['id_smt'];
 				$temps[] = $temp_kodemk['result']['kode_mk'];
-				$temps[] = $key['fk__id_mk'];
+				$temps[] = $temp_kodemk['result']['nm_mk'];
 				$temps[] = $key['nm_kls'];
 				$temps[] = $key['sks_mk'];
 				$temps[] = $count_klsmhs['result'];
