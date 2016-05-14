@@ -725,7 +725,7 @@ class Mahasiswa extends CI_Controller {
 				$temp_jenjang = $this->feeder->getrecord($this->session->userdata('token'),'jenjang_pendidikan',$filter_jenjang);
 				//var_dump($temp_jenjang['result']);
 				$link = $key['id_jns_daftar']==2?' <a href="javascript:void();" class="modalButton" data-toggle="modal" data-src="'.base_url().'mahasiswa/nilaipindah/'.$key['id_reg_pd'].'" data-target="#modalku"><i class="fa fa-external-link"></i></a>':'';
-				$temps[] = $temp_jenjang['result']['nm_jenj_didik'].'/'.$key['fk__sms'];
+				$temps[] = $temp_jenjang['result']['nm_jenj_didik'].' '.$key['fk__sms'];
 				//$temps[] = $key['fk__jns_daftar'].$link;
 				$temps[] = $key['fk__jns_daftar'];
 				$temps[] = substr($key['mulai_smt'], 0,4);

@@ -61,24 +61,23 @@
                                   <ul class=\"dropdown-menu\" role=\"menu\">
                                     <li><a href=\"".base_url()."mahasiswa\"><i class=\"fa fa-user-plus\"></i> Mahasiswa</a></li>
                                     <li><a href=\"".base_url()."kelas\"><i class=\"fa fa-bars\"></i> Kelas Perkuliahan</a></li>
-                                    <!--li><a href=\"".base_url()."nilai\"><i class=\"fa fa-file-text-o\"></i> Nilai Perkuliahan</a></li-->
+                                    <!-- li><a href=\"".base_url()."nilai\"><i class=\"fa fa-file-text-o\"></i> Nilai Perkuliahan</a></li -->
                                     <li><a href=\"".base_url()."akm\"><i class=\"fa fa-pencil-square-o\"></i> Aktivitas Kuliah Mahasiswa</a></li>
-                                    <!--li><a href=\"".base_url()."mhslulus\"><i class=\"fa fa-graduation-cap\"></i> Mahasiswa Lulus / DO</a></li-->
-                                  </ul>
+                                    <!--li><a href=\"".base_url()."mhslulus\"><i class=\"fa fa-graduation-cap\"></i> Mahasiswa Lulus / DO</a></li -->
+                                    <li><a href=\"".base_url()."#\"><i class=\"fa fa-bars\"></i> Skala Nilai</a></li>
+                                    <li><a href=\"".base_url()."#\"><i class=\"fa fa-bars\"></i> Kapasitas Mahasiswa Baru</a></li>
+                                    <li><a href=\"".base_url()."matakuliah\"><i class=\"fa fa-graduation-cap\"></i> Mata Kuliah</a></li>
+                                  </ul> 
                                 </li>
                                 <li class=\"dropdown\">
                                   <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\"><i class=\"fa fa-th\"></i> Data Referensi <span class=\"caret\"></span></a>
                                   <ul class=\"dropdown-menu\" role=\"menu\">
-                                    <!--li><a href=\"".base_url()."ref_agama\">Data Agama</a></li-->
+                                    <li><a href=\"".base_url()."ref_agama\">Data Agama</a></li>
                                     <li><a href=\"".base_url()."kk\">Data Kebutuhan Khusus</a></li>
-                                    <!--li><a href=\"".base_url()."ref_pekerjaan\">Data Pekerjaan</a></li>
+                                    <li><a href=\"".base_url()."ref_pekerjaan\">Data Pekerjaan</a></li>
                                     <li><a href=\"".base_url()."ref_penghasilan\">Data Penghasilan</a></li>
-                                    <li><a href=\"".base_url()."ref_status\">Data Status Mahasiswa</a></li-->
+                                    <li><a href=\"".base_url()."ref_status\">Data Status Mahasiswa</a></li>
                                     <li><a href=\"".base_url()."wilayah\">Data Wilayah</a></li>
-                                    <!--li class=\"divider\"></li>
-                                    <li><a href=\"#\">Separated link</a></li>
-                                    <li class=\"divider\"></li>
-                                    <li><a href=\"#\">One more separated link</a></li-->
                                   </ul>
                                 </li>
                                 <li class=\"dropdown\">
@@ -86,13 +85,9 @@
                                   <ul class=\"dropdown-menu\" role=\"menu\">
                                     <li><a href=\"".base_url()."krskhs/krs\">KRS Mahasiswa</a></li>
                                     <li><a href=\"".base_url()."krskhs/khs\">KHS Mahasiswa</a></li>
-                                    <!--li class=\"divider\"></li>
-                                    <li><a href=\"#\">Separated link</a></li>
-                                    <li class=\"divider\"></li>
-                                    <li><a href=\"#\">One more separated link</a></li-->
                                   </ul>
                                 </li>
-                                <!--li><a href=\"".base_url()."welcome/table\"><i class=\"fa fa-database\"></i> List Tabel</a></li-->
+                                <li><a href=\"".base_url()."welcome/table\"><i class=\"fa fa-database\"></i> List Tabel</a></li>
                       </ul>";
                 }
             ?>
