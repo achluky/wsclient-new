@@ -15,7 +15,7 @@
 		<?php
 			if (($error_code == 0) && ($error_desc == '')) {
 				echo "<div class=\"col-ld-12 header_aksi\">
-						<form action=\"".base_url()."mahasiswa/uploadexcel\" class=\"frm_upload\" id=\"frmku\" enctype=\"multipart/form-data\" method=\"post\">
+						<form action=\"".base_url()."matakuliah/uploadexcel\" class=\"frm_upload\" id=\"frmku\" enctype=\"multipart/form-data\" method=\"post\">
 							<div class=\"form-group col-xs-4\">
 								<div class=\"input-group\">
 									<span class=\"input-group-btn\">
@@ -40,7 +40,8 @@
 								<div class=\"form-group\">
 
 								    <div class=\"col-sm-4\">
-								    	<select class=\"form-control input-sm prodi\" name=\"prodi\">
+								    	<select class=\"form-control input-sm prodi\" name=\"prodi\" required>
+											<option value=\"\">-Pilih-</option>
 										  ";
 										  		
 										  	foreach ($program_studi as $key) {

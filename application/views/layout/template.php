@@ -134,7 +134,7 @@
 
     <footer class="footer">
       <div class="container copy">
-        WS CLient &copy; <?php echo date('Y')." <a href=\"http://wsclient.jago.link\" target=\"_blank\">".$this->config->item('meta_author')."</a>";?> 
+        WS CLient &copy; <?php echo date('Y');?> 
       </div>
     </footer>
 

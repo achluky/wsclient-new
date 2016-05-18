@@ -94,9 +94,6 @@ class Matakuliah extends CI_Controller {
 			echo "<div class=\"bs-callout bs-callout-danger\">".$this->upload->display_errors()."</div>";
 		} else {
 			$mode = $this->input->post('mode');
-			echo $mode;
-			die();
-			
 			$file_data = $this->upload->data();
 			$file_path = $this->config->item('upload_path').$file_data['file_name'];
 
@@ -143,18 +140,17 @@ class Matakuliah extends CI_Controller {
 							$temp_data['a_bahan_ajar'] = $value['P'];
 							$temp_data['acara_prak'] = $value['Q'];
 							$temp_data['a_diktat'] = $value['R'];
-							$temp_data['tgl_mulai_efektif'] = $value['S'];
-							$temp_data['tgl_akhir_efektif'] = $value['T'];
+							$temp_data['tgl_mulai_efektif'] = trim($value['S']);
+							$temp_data['tgl_akhir_efektif'] = trim($value['T']);
 
 							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], $this->table, $temp_data);
 							if ($temp_result['result']) {
 								if ($temp_result['result']['error_desc']==NULL) {
 									++$sukses_count;
-									$sukses_msg[] = "<h4>Sukses</h4>Nilai pindahan mata kuliah <strong>".$nm_mk_diakui."</strong> \
-													untuk mahasiswa <strong>".$nm_mhs."</strong>/<strong>".$nim."</strong> berhasil ditambahkan";
+									$sukses_msg[] = "<h4>Sukses</h4> </strong>/<strong>".$value['D']."</strong> berhasil ditambahkan";
 								} else {
 									++$error_count;
-									$error_msg[] = "<h4>Error ".$temp_result['result']['error_code']." (".$nm_mhs." / ".$nim.")</h4>".$temp_result['result']['error_desc'];
+									$error_msg[] = "<h4>Error ".$temp_result['result']['error_code']." (".$value['D']." / ".$value['E'].")</h4>".$temp_result['result']['error_desc'];
 								}
 							} else {
 								echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
@@ -166,7 +162,7 @@ class Matakuliah extends CI_Controller {
 						if ((!$sukses_count==0) || (!$error_count==0)) {
 							echo "Waktu eksekusi ".$time_eks." detik<br />
 									Results (total ".$jml_row." baris data):<br />
-									<font color=\"#3c763d\">".$sukses_count." data Nilai pindahan baru berhasil ditambah</font>";
+									<font color=\"#3c763d\">".$sukses_count." data baru berhasil ditambah</font>";
 									if ($sukses_count!=0) {
 										echo "<a data-toggle=\"collapse\" href=\"#cols_sukses\" aria-expanded=\"false\" aria-controls=\"cols_sukses\"> Detail</a><br />";
 									} else { echo "<br />"; }
@@ -200,78 +196,83 @@ class Matakuliah extends CI_Controller {
 	{
 		
 		$this->benchmark->mark('mulai');
-		$prodi = explode('|', $this->input->get('p')); // 1.id_sms 2.id_jenjang pendidikan
-		$temp_sp = $this->session->userdata('id_sp');
-
-		if (!file_exists($this->template)) {
-			echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>File template tidak tersedia.</div>";
+		$p = $this->input->get('p');
+		if($p==""){
+			echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4> Nama Prodi Harus Dipilih.</div>";
 		} else {
-			//
-			$data = array(
-						array('id_sms' => $prodi[0],
-							'id_jenjang_pendidikan' => $prodi[1],
-							'kode_mk' => '',
-							'mk_kuliah' => '',
-							'jenis_mk' => '',
-							'klompok_mk' => '',
-							'sks_mk' => '',
-							'sks_tm' => '',
-							'sks_prak' => '',
-							'sks_pl' => '',
-							'sks_sim' => '',
-							'metode_k' => '',
-							'a_sap' => '',
-							'a_sil' => '',
-							'a_ba' => '',
-							'a_prak' => '',
-							'a_diklat' => '',
-							'tgl_ef' => '2015-13-24',
-							'tgl_ak_ef' => '2015-13-24')
-				   	);
-			$objPHPExcel = PHPExcel_IOFactory::load($this->template);
-
-			//SET SHEET Mata Kuliah
-			$objPHPExcel->setActiveSheetIndex(0);
-			$baseRow = 3;
-			foreach($data as $r => $dataRow) {
-				$row = $baseRow + $r;
-				$objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
-				$objPHPExcel->getActiveSheet()->setCellValue('A'.$row, $r+1)
-									->setCellValue('B'.$row, $dataRow['id_sms'])
-									->setCellValue('C'.$row, $dataRow['id_jenjang_pendidikan'])
-									->setCellValue('D'.$row, $dataRow['kode_mk'])
-									->setCellValue('E'.$row, $dataRow['mk_kuliah'])
-									->setCellValue('F'.$row, $dataRow['jenis_mk'])
-									->setCellValue('G'.$row, $dataRow['klompok_mk'])
-									->setCellValue('H'.$row, $dataRow['sks_mk'])
-									->setCellValue('I'.$row, $dataRow['sks_tm'])
-									->setCellValue('J'.$row, $dataRow['sks_prak'])
-									->setCellValue('K'.$row, $dataRow['sks_pl'])
-									->setCellValue('L'.$row, $dataRow['sks_sim'])
-									->setCellValue('M'.$row, $dataRow['metode_k'])
-									->setCellValue('N'.$row, $dataRow['a_sap'])
-									->setCellValue('O'.$row, $dataRow['a_sil'])
-									->setCellValue('P'.$row, $dataRow['a_ba'])
-									->setCellValue('Q'.$row, $dataRow['a_prak'])
-									->setCellValue('R'.$row, $dataRow['a_diklat'])
-									->setCellValue('S'.$row, $dataRow['tgl_ef'])
-									->setCellValue('T'.$row, $dataRow['tgl_ak_ef']);
-			}
-			$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
-
-			$filename = time().'-template-matakuliah.xlsx';
-			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-			$temp_tulis = $objWriter->save('temps/'.$filename);
-			$this->benchmark->mark('selesai');
-			$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
-			if ($temp_tulis==NULL) {
-				echo "<div class=\"bs-callout bs-callout-success\">
-						File berhasil digenerate dalam waktu <strong>".$time_eks." detik</strong>. <br />Klik <a href=\"".base_url()."index.php/file/download/".$filename."\">disini</a> untuk download file
-					</div>";
+			$prodi = explode('|', $this->input->get('p')); // 1.id_sms 2.id_jenjang pendidikan
+			$temp_sp = $this->session->userdata('id_sp');
+			
+			if (!file_exists($this->template)) {
+				echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>File template tidak tersedia.</div>";
 			} else {
-				echo "<div class=\"bs-callout bs-callout-danger\">
-						<h4>Error</h4>File tidak bisa digenerate. Folder 'temps' tidak ada atau tidak bisa ditulisi.
-					</div>";
+				//
+				$data = array(
+							array('id_sms' => $prodi[0],
+								'id_jenjang_pendidikan' => $prodi[1],
+								'kode_mk' => '',
+								'mk_kuliah' => '',
+								'jenis_mk' => '',
+								'klompok_mk' => '',
+								'sks_mk' => '',
+								'sks_tm' => '',
+								'sks_prak' => '',
+								'sks_pl' => '',
+								'sks_sim' => '',
+								'metode_k' => '',
+								'a_sap' => '',
+								'a_sil' => '',
+								'a_ba' => '',
+								'a_prak' => '',
+								'a_diklat' => '',
+								'tgl_ef' => '2015-13-24',
+								'tgl_ak_ef' => '2015-13-24')
+						);
+				$objPHPExcel = PHPExcel_IOFactory::load($this->template);
+
+				//SET SHEET Mata Kuliah
+				$objPHPExcel->setActiveSheetIndex(0);
+				$baseRow = 3;
+				foreach($data as $r => $dataRow) {
+					$row = $baseRow + $r;
+					$objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+					$objPHPExcel->getActiveSheet()->setCellValue('A'.$row, $r+1)
+										->setCellValue('B'.$row, $dataRow['id_sms'])
+										->setCellValue('C'.$row, $dataRow['id_jenjang_pendidikan'])
+										->setCellValue('D'.$row, $dataRow['kode_mk'])
+										->setCellValue('E'.$row, $dataRow['mk_kuliah'])
+										->setCellValue('F'.$row, $dataRow['jenis_mk'])
+										->setCellValue('G'.$row, $dataRow['klompok_mk'])
+										->setCellValue('H'.$row, $dataRow['sks_mk'])
+										->setCellValue('I'.$row, $dataRow['sks_tm'])
+										->setCellValue('J'.$row, $dataRow['sks_prak'])
+										->setCellValue('K'.$row, $dataRow['sks_pl'])
+										->setCellValue('L'.$row, $dataRow['sks_sim'])
+										->setCellValue('M'.$row, $dataRow['metode_k'])
+										->setCellValue('N'.$row, $dataRow['a_sap'])
+										->setCellValue('O'.$row, $dataRow['a_sil'])
+										->setCellValue('P'.$row, $dataRow['a_ba'])
+										->setCellValue('Q'.$row, $dataRow['a_prak'])
+										->setCellValue('R'.$row, $dataRow['a_diklat'])
+										->setCellValue('S'.$row, $dataRow['tgl_ef'])
+										->setCellValue('T'.$row, $dataRow['tgl_ak_ef']);
+				}
+				$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
+
+				$filename = time().'-template-matakuliah.xlsx';
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$temp_tulis = $objWriter->save('temps/'.$filename);
+				$this->benchmark->mark('selesai');
+				$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
+				if ($temp_tulis==NULL) {
+					echo "<div class=\"bs-callout bs-callout-success\">
+							File berhasil digenerate dalam waktu <strong>".$time_eks." detik</strong>. <br />Klik <a href=\"".base_url()."index.php/file/download/".$filename."\">disini</a> untuk download file
+						</div>";
+				} else {
+					echo "<div class=\"bs-callout bs-callout-danger\">
+							<h4>Error</h4>File tidak bisa digenerate. Folder 'temps' tidak ada atau tidak bisa ditulisi.
+						</div>";
+				}
 			}
 		}
 	}
