@@ -243,7 +243,7 @@ class Welcome extends CI_Controller {
 									'jenis' => $key['jenis'],
 									'keterangan' => $key['keterangan'],
 									'aksi' => '
-											<a href="javascript:void();" class="modalButton" data-toggle="modal" data-src="'.base_url().'index.php/welcome/view/'.$key['table'].'" data-height="300" data-width="560" data-target="#modalku">
+											<a href="javascript:void();" class="modalButton" data-toggle="modal" data-src="'.base_url().'index.php/welcome/listdir/'.$key['table'].'" data-height="300" data-width="560" data-target="#modalku">
                                                   <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Struktur
                                             </a>
 											| 
