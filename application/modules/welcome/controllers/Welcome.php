@@ -91,6 +91,16 @@ class Welcome extends CI_Controller {
 		$data['assign_modal'] = '';
 		tampil('table_view',$data);	
 	}
+	
+	// list structure tabel
+	public function listdir($table='')
+    {
+        isset($table)?$tables=$table:$tables='mahasiswa';
+        $temp_dic = $this->feeder->getdic($this->session->userdata('token'), $tables);
+        $data['listdic'] = $temp_dic;
+        $data['tabel'] = $tables;
+        $this->load->view('table_view_structure',$data);
+    }
 
 	public function setting()
 	{
@@ -113,7 +123,6 @@ class Welcome extends CI_Controller {
 					} else {
 						$id_sp = '0';
 					}
-
 					//$this->session->set_userdata('')
 					$sessi = array('kode_pt' => $kode_pt,
 									'id_sp' => $id_sp,
@@ -233,7 +242,12 @@ class Welcome extends CI_Controller {
 									'nama_table' => $key['table'],
 									'jenis' => $key['jenis'],
 									'keterangan' => $key['keterangan'],
-									'aksi' => '<a href="#"><i class="fa fa-bars"></i> Struktur</a> | <a href="#"><i class="fa fa-search"></i> View</a>'
+									'aksi' => '
+											<a href="javascript:void();" class="modalButton" data-toggle="modal" data-src="'.base_url().'index.php/welcome/view/'.$key['table'].'" data-height="300" data-width="560" data-target="#modalku">
+                                                  <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Struktur
+                                            </a>
+											| 
+											<a href="#"><i class="fa fa-search"></i> View</a>'
 					);
 			}
 			$temp_output = array(
