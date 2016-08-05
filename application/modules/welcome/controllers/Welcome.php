@@ -99,7 +99,7 @@ class Welcome extends CI_Controller {
         $temp_dic = $this->feeder->getdic($this->session->userdata('token'), $tables);
         $data['listdic'] = $temp_dic;
         $data['tabel'] = $tables;
-        $this->load->view('table_view_structure',$data);
+        tampil('table_view_structure',$data);
     }
 
 	public function setting()

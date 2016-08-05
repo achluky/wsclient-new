@@ -6,8 +6,8 @@
         <div class="bs-callout bs-callout-danger">
             <h4>Error</h4>
             <p><?php echo $error;?></p>
-            errorrrrr
-          </div>
+            error
+        </div>
     <?php } 
         $sukses = $this->session->flashdata('token_sukses'); 
         if(!empty($sukses)) { 
