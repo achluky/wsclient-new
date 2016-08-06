@@ -88,7 +88,7 @@ class Welcome extends CI_Controller {
 		$data['site_title'] = 'Daftar Tabel Webservice';
 		$data['title_page'] = 'Daftar Tabel Webservice';
 		$data['assign_js'] = 'js/table_dt.js';
-		$data['assign_modal'] = '';
+		$data['assign_modal'] = 'layout/modal_big_tpl';
 		tampil('table_view',$data);	
 	}
 	
@@ -99,7 +99,10 @@ class Welcome extends CI_Controller {
         $temp_dic = $this->feeder->getdic($this->session->userdata('token'), $tables);
         $data['listdic'] = $temp_dic;
         $data['tabel'] = $tables;
-        tampil('table_view_structure',$data);
+		// $data['assign_js'] = '';
+		// $data['assign_modal'] = 'modal_big_tpl';
+        // tampil('table_view_structure',$data);
+        $this->load->view('tpl/table_view_structure',$data);
     }
 
 	public function setting()
@@ -244,7 +247,7 @@ class Welcome extends CI_Controller {
 									'keterangan' => $key['keterangan'],
 									'aksi' => '
 											<a href="javascript:void();" class="modalButton" data-toggle="modal" data-src="'.base_url().'index.php/welcome/listdir/'.$key['table'].'" data-height="300" data-width="560" data-target="#modalku">
-                                                  <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Struktur
+                                                  <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Struktur
                                             </a>
 											| 
 											<a href="#"><i class="fa fa-search"></i> View</a>'

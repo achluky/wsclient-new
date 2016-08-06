@@ -24,7 +24,7 @@ class Kapasitasmhsbaru extends CI_Controller {
             $this->load->model('m_feeder','feeder');
             $this->load->helper('directory');
             $this->load->helper('csv');
-            $this->load->helper('function');
+            // $this->load->helper('function');
             //inisial config upload
             $config['upload_path'] = $this->config->item('upload_path');
             $config['allowed_types'] = $this->config->item('upload_tipe');

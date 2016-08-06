@@ -45,8 +45,8 @@ function stats(x) {
 //stats(0);
 setInterval(stats(), 1000);
 
-$('a.modalButton').click(function(){
-	var src = $(this).attr('data-src');
-	$('#isi').html('Loading, please wait...');
-	$('#isi').load(src);
-});
+// $('a.modalButton').click(function(){
+// 	var src = $(this).attr('data-src');
+// 	$('#isi').html('Loading, please wait...');
+// 	$('#isi').load(src);
+// });

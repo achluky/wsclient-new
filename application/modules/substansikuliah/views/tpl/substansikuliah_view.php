@@ -50,7 +50,6 @@
 										  echo "
 										</select>
 								    </div>
-
 								    <div class=\"col-sm-2\">
 									    <a href=\"javascript:void();\" class=\"btn btn-info btn-sm btn-download ladda-button\" data-style=\"expand-right\" disabled>
 											<i class=\"fa fa-download\"></i> Generate Template

@@ -7,7 +7,8 @@
 			//"sPaginationType": "full_numbers",
 			"processing": true,
 			"language": {
-				"processing": "<i class=\"fa fa-spinner fa-spin\"></i> Loading data, please wait..." //add a loading image,simply putting <img src="loader.gif" /> tag.
+				"processing": "<i class=\"fa fa-spinner fa-spin\"></i> Loading data, please wait..." 
+				//add a loading image,simply putting <img src="loader.gif" /> tag.
 			},
 			"serverSide": true,
 			"ajax": {
@@ -38,9 +39,10 @@
 		e.preventDefault();
 		var url = top_url+'mahasiswa/createexcel/';
 		var l = Ladda.create(this);
+		var prodi = $('.prodi').val();
 		$(".isi").hide();
 		l.start();
-		$.get(url, function(returnData) {
+		$.get(url+'?p='+prodi, function(returnData) {
 			$(".alert").show();
 			$(".isi").show();
 			if (!returnData) {

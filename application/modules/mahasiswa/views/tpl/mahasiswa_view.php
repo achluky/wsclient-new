@@ -36,19 +36,28 @@
 								</div>
 			                </div>
 		                </form>
-						<a href=\"javascript:void();\" class=\"btn btn-info btn-sm btn-download ladda-button\" data-style=\"expand-right\">
-						<!--a href=\"".base_url()."template/mhs_template.xlsx\" class=\"btn btn-info btn-sm\"-->
-							<i class=\"fa fa-download\"></i> Generate Template
-						</a>
-						<!--span class=\"input-group-btn\">
-							<button class=\"btn btn-download btn-sm btn-info ladda-button\" data-style=\"expand-right\"><i class=\"fa fa-download\"></i> Generate Template</button>
-							<button data-toggle=\"dropdown\" class=\"btn btn-sm btn-info dropdown-toggle\">Kelas kuliah <span class=\"caret\"></span></button>
-							<ul class=\"dropdown-menu\">
-								<li><input type=\"radio\" name=\"mode\" id=\"kelas_down\" value=\"0\" checked><label for=\"kelas_down\">Kelas kuliah</label></li>
-								<li><input type=\"radio\" name=\"mode\" id=\"krs_down\" value=\"1\"><label for=\"krs_down\">KRS Mhs</label></li>
-								<li><input type=\"radio\" name=\"mode\" id=\"dosen_down\" value=\"2\"><label for=\"dosen_down\">Dosen MK</label></li>
-							</ul>
-						</span-->
+
+		                 <form action=\"".base_url()."\" class=\"frm_upload\" id=\"frmku\" method=\"post\">
+							<div class=\"form-group col-xs-4\">
+								<div class=\"form-group\">
+								    <div class=\"col-sm-4\">
+								    	<select class=\"form-control input-sm prodi\" name=\"prodi\" required>
+											<option value=\"\">-Pilih Nama Prodi-</option>
+										  ";
+										  	foreach ($program_studi as $key) {
+										  		echo "<option value='".$key['id_sms']."'>".$key['nm_lemb']."</option>";
+										  	}
+										  echo "
+										</select>
+								    </div>
+								    <div class=\"col-sm-2\">
+									    <a href=\"javascript:void();\" class=\"btn btn-info btn-sm btn-download ladda-button\" data-style=\"expand-right\">
+											<i class=\"fa fa-download\"></i> Generate Template
+										</a>
+									</div>
+								</div>
+							</div>
+						</form>
 					</div>";
 			}
 		?>	

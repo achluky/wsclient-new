@@ -64,14 +64,15 @@ class Substansikuliah extends CI_Controller {
 	
 	public function index()
 	{
-		$this->mk();
+		$this->skuliah();
 	}
 
-	public function mk()
+	public function skuliah()
 	{
 		$temp_rec = $this->feeder->getrecord($this->session->userdata('token'), $this->table, $this->filter);
 		$temp_sp = $this->session->userdata('id_sp');
-		$temp_sms = $this->feeder->getrset($this->session->userdata('token'), $this->table1, 'id_sp=\'e1788280-0134-4b88-992b-d7184be667b9\'', $this->order, $this->limit, $this->offset);
+		$temp_sms = $this->feeder->getrset($this->session->userdata('token'), $this->table1, 
+										'id_sp=\'e1788280-0134-4b88-992b-d7184be667b9\'', $this->order, $this->limit, $this->offset);
 		if (($temp_rec['error_desc']=='') && ($temp_sp=='') ){
 			$this->session->set_flashdata('error','Kode PT Anda tidak ditemukan, silahkan masukkan kode PT anda dengan benar');
 			redirect('welcome/setting');

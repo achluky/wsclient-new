@@ -192,9 +192,7 @@ class Matakuliah extends CI_Controller {
 		}
 	}
 
-	public function createexcel()
-	{
-		
+	public function createexcel(){		
 		$this->benchmark->mark('mulai');
 		$p = $this->input->get('p');
 		if($p==""){
@@ -208,7 +206,8 @@ class Matakuliah extends CI_Controller {
 			} else {
 				//
 				$data = array(
-							array('id_sms' => $prodi[0],
+							array(
+								'id_sms' => $prodi[0],
 								'id_jenjang_pendidikan' => $prodi[1],
 								'kode_mk' => '',
 								'mk_kuliah' => '',
@@ -225,8 +224,8 @@ class Matakuliah extends CI_Controller {
 								'a_ba' => '',
 								'a_prak' => '',
 								'a_diklat' => '',
-								'tgl_ef' => "'2015-13-24",
-								'tgl_ak_ef' => "'2015-13-24")
+								'tgl_ef' => '2015-13-24',
+								'tgl_ak_ef' => '2015-13-24')
 						);
 				$objPHPExcel = PHPExcel_IOFactory::load($this->template);
 
@@ -266,7 +265,8 @@ class Matakuliah extends CI_Controller {
 				$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
 				if ($temp_tulis==NULL) {
 					echo "<div class=\"bs-callout bs-callout-success\">
-							File berhasil digenerate dalam waktu <strong>".$time_eks." detik</strong>. <br />Klik <a href=\"".base_url()."index.php/file/download/".$filename."\">disini</a> untuk download file
+							File berhasil digenerate dalam waktu <strong>".$time_eks." detik</strong>. <br />
+							Klik <a href=\"".base_url()."index.php/file/download/".$filename."\">disini</a> untuk download file
 						</div>";
 				} else {
 					echo "<div class=\"bs-callout bs-callout-danger\">

@@ -9,10 +9,8 @@
     <meta content="<?php echo $this->config->item('meta_desc');?>" name="description" />
     <meta content="<?php echo $this->config->item('meta_key');?>" name="keywords" />
     <meta content="<?php echo $this->config->item('meta_author');?>" name="author" />
-
     <!-- Bootstrap core CSS -->
     <link href="<?php echo base_url();?>assets/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
-
     <!-- Custom styles for this template -->
     <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/bootstrap-switch.min.css?v=3.3.2" rel="stylesheet">
@@ -34,7 +32,6 @@
   <?php
       $temp_pecah = explode('/ws/', $this->session->userdata('ws'));
       $temp_pecah2 = explode('.php?wsdl', $temp_pecah[1]);
-      //echo $temp_pecah2[0];
   ?>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top <?php echo $temp_pecah2['0']=='live'?"":"navbar-inverse" ?>">
@@ -47,7 +44,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="<?php echo base_url();?>"><i class="fa fa-code"></i> WS Client</a>
+          <a class="navbar-brand" href="<?php echo base_url();?>"><i class="glyphicon glyphicon-sunglasses"></i> WS Feeder DIKTI Client - ITERA</a>
         </div>
     
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -58,13 +55,16 @@
                                 <li class=\"dropdown\">
                                   <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\"><i class=\"fa fa-clone\"></i> Import Data <span class=\"caret\"></span></a>
                                   <ul class=\"dropdown-menu\" role=\"menu\">
-                                    <li><a href=\"".base_url()."mahasiswa\"><i class=\"fa fa-user-plus\"></i> Mahasiswa</a></li>
-                                    <li><a href=\"".base_url()."akm\"><i class=\"fa fa-pencil-square-o\"></i> Aktivitas Kuliah Mahasiswa</a></li>
-                                    <li><a href=\"".base_url()."skalanilai\"><i class=\"fa fa-book\"></i> Skala Nilai</a></li>
-                                    <!-- li><a href=\"".base_url()."Kapasitasmhsbaru\"><i class=\"fa fa-book\"></i> Kapasitas Mahasiswa Baru</a></li -->
-                                    <li><a href=\"".base_url()."kelas\"><i class=\"fa fa-graduation-cap\"></i> Kelas Perkuliahan</a></li>
+                                    <li><a href=\"".base_url()."mahasiswa\"><i class=\"fa fa-graduation-cap\"></i> Mahasiswa</a></li>
+                                    <li class=\"divider\"></li>
+                                    <li><a href=\"".base_url()."akm\"><i class=\"fa fa-graduation-cap\"></i> Aktivitas Kuliah Mahasiswa</a></li>
                                     <li><a href=\"".base_url()."matakuliah\"><i class=\"fa fa-graduation-cap\"></i> Mata Kuliah</a></li>
                                     <li><a href=\"".base_url()."substansikuliah\"><i class=\"fa fa-graduation-cap\"></i> Substansi Kuliah</a></li>
+                                    <li><a href=\"".base_url()."kelas\"><i class=\"fa fa-graduation-cap\"></i> Kelas/Nilai Perkuliahan</a></li>
+                                    <li class=\"divider\"></li>
+                                    <li><a href=\"".base_url()."skalanilai\"><i class=\"fa fa-graduation-cap\"></i> Skala Nilai</a></li>
+                                    <li><a href=\"".base_url()."kapasitasmhsbaru\"><i class=\"fa fa-graduation-cap\"></i> Kapasitas Mahasiswa Baru</a></li>
+                                    
                                   </ul> 
                                 </li>
                                 <li class=\"dropdown\">
@@ -72,9 +72,6 @@
                                   <ul class=\"dropdown-menu\" role=\"menu\">
                                     <li><a href=\"".base_url()."ref_agama\">Data Agama</a></li>
                                     <li><a href=\"".base_url()."kk\">Data Kebutuhan Khusus</a></li>
-                                    <li><a href=\"".base_url()."ref_pekerjaan\">Data Pekerjaan</a></li>
-                                    <li><a href=\"".base_url()."ref_penghasilan\">Data Penghasilan</a></li>
-                                    <li><a href=\"".base_url()."ref_status\">Data Status Mahasiswa</a></li>
                                     <li><a href=\"".base_url()."wilayah\">Data Wilayah</a></li>
                                   </ul>
                                 </li>
@@ -107,25 +104,8 @@
             ?>
           </ul>
         </div><!-- /.navbar-collapse -->
-        
-        <!-- <li class=\"white\">
-            <a href=\"".base_url()."welcome/update\">
-                <i class=\"fa fa-bell-o fa-refresh\"></i> <span class=\"badge\" id=\"notif\">0</span>
-            </a>
-        </li> -->
-        <!--small>
-            <marquee>
-              <font color="#ce4844" >
-                <div class="info_update">
-                  Update-an terbaru sudah tersedia. SIlahkan download di http://wsclient.jago.link
-                </div>
-              </font>
-              </div>
-            </marquee>
-        </small-->
       </div><!-- /.container-fluid -->
     </nav>
-
 
     <div class="container-fluid ws-container">
         <?php echo $view; ?>
@@ -133,10 +113,9 @@
 
     <footer class="footer">
       <div class="container copy">
-        WS CLient &copy; <?php echo date('Y');?> <a href="https://github.com/achluky/wsclient-new" target="_blank_">GitHub</a>
+        ITERA &copy; <?php echo date('Y');?> <a href="https://github.com/achluky/wsclient-new" target="_blank_">GitHub</a>
       </div>
     </footer>
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -155,7 +134,6 @@
     <script src="<?php echo base_url();?>assets/js/jquery.form.js"></script>
     <script src="<?php echo base_url();?>assets/js/app.js"></script>
     <?php
-        //echo $assign_js; 
         if ($assign_js != '') {
             $this->load->view($assign_js);
         }

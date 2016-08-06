@@ -7,3 +7,13 @@ if (! function_exists('ping')) {
 		return @fsockopen($host, $port, $iErrno, $sErrStr, 1);
 	}
 }
+
+if (! function_exists('debug')) {
+	
+	function debug($var)
+	{
+		echo "<pre/>";
+		var_dump($var);
+		die();
+	}
+}

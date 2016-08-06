@@ -31,9 +31,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <center>
-                <img src="<?php echo base_url();?>assets/img/logo itera oke.png" class="img-polaroid" style="width: 100px; margin-top: 100px;">
-                </center>
                 <div class="login-panel panel panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">Please Login</h3>
@@ -70,8 +67,8 @@
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
                                 <button class="btn btn-info " type="submit">Login</button> 
-                                <br/>
-                                <small>Klik di <a href="<?php echo base_url();?>setup"> sini</a> untuk setup WSClient</small>
+                                <button class="btn btn-primary " type="reset">Reset</button> 
+                                <small>Klik di <a href="<?php echo base_url();?>setup"> sini</a> untuk setup</small>
                             </fieldset>
                         </form>
                     </div>

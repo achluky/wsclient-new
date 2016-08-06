@@ -115,7 +115,8 @@ class Skalanilai extends CI_Controller {
                     $temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'sms',$filter_sms);
                     
                     if (count($temp_sms['result'])==0 ) {
-                        echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4> Nilai <u>idsms</u> pada kode prodi <b>".$value['B']."</b> tidak terdefinisikan! </div>";
+                        echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4> Nilai <u>idsms</u> 
+                                pada kode prodi <b>".$value['B']."</b> dan id_sp ".$this->session->userdata('id_sp')."tidak terdefinisikan! </div>";
                         die();
                     } else{
                         $id_sms = $temp_sms['result']['id_sms'];
