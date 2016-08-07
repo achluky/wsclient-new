@@ -65,10 +65,12 @@
                                 <div class="form-group">
                                     <input type="checkbox" id="db_cek" name="db_ws" checked class="form-control" data-label-text="DB Live" data-on-color="success" data-off-color="danger" data-size="small">
                                 </div>
-                                <!-- Change this to a button or input when using this as a form -->
-                                <button class="btn btn-info " type="submit">Login</button> 
-                                <button class="btn btn-primary " type="reset">Reset</button> 
-                                <small>Klik di <a href="<?php echo base_url();?>setup"> sini</a> untuk setup</small>
+                                <div class="form-group">
+                                    <!-- Change this to a button or input when using this as a form -->
+                                    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button> 
+                                    <!-- <button class="btn btn-primary " type="reset">Reset</button>  -->
+                                    <small>Klik di <a href="<?php echo base_url();?>setup"> sini</a> untuk setup</small>
+                                </div>
                             </fieldset>
                         </form>
                     </div>
