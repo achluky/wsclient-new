@@ -3,8 +3,18 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<h3><?php echo $title_page; ?></h3>
+				<small>Menampilkan data referensi wilayah. </small>	
+				Klik 
+				<a href="javascript:void();" class="btn btn-info btn-sm btn-download ladda-button" data-style="expand-right">
+					<i class="fa fa-download"></i> di sini
+				</a>
+				untuk Generate dan Download data
 			</div>
 		</div>	
+	</div>
+	<div class="alert alert-warning" role="alert" style="display:none;" >
+		<div class="loading"></div>
+		<div class="isi"></div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12">

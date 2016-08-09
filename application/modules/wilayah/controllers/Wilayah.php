@@ -1,16 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * WS Client Feeder Wilayah Module
- * 
- * @author 		Yusuf Ayuba
- * @copyright   2015
- * @link        http://jago.link
- * @package     https://github.com/virbo/wsfeeder
- * 
-*/
-
 class Wilayah extends CI_Controller {
 
 	//private $data;
@@ -36,6 +26,10 @@ class Wilayah extends CI_Controller {
 			$this->offset = $this->config->item('offset');
 			$this->table = 'wilayah';
 			$this->load->model('m_feeder','feeder');
+			$this->load->helper('csv');
+			$this->load->library('excel');
+			$this->template = './template/wilayah_template.xlsx';
+
 			$temp_setting = read_file('setting.ini');
 			$pecah = explode('#', $temp_setting);
 			$this->dir_ws = $pecah[1];
@@ -47,14 +41,10 @@ class Wilayah extends CI_Controller {
 			}
 		}
 	}
-	
-	public function index()
-	{
+	public function index(){
 		$this->wilayah();
 	}
-
-	public function wilayah()
-	{
+	public function wilayah(){
 		$temp_rec = $this->feeder->getrecord($this->session->userdata('token'), $this->table, $this->filter);
 		$temp_sp = $this->session->userdata('id_sp');
 		if (($temp_rec['error_desc']=='') && ($temp_sp=='') ){
@@ -69,61 +59,103 @@ class Wilayah extends CI_Controller {
 		$data['assign_modal'] = '';
 		tampil('wilayah_view',$data);
 	}
-
-	public function jsonWil()
-	{
+	public function jsonWil(){
 		$search = $this->input->post('search');
 		$sSearch = trim($search['value']);
-
-		//$Data = $this->input->get('columns');
 		$orders = $this->input->post('order');
-		//$temp_order = 
-
 		$iStart = $this->input->post('start');
 		$iLength = $this->input->post('length');
-
 		$temp_limit = $iLength;
 		$temp_offset = $iStart?$iStart : 0;
 		$temp_total = $this->feeder->count_all($this->session->userdata('token'),$this->table,$this->filter);
 		$totalData = $temp_total['result'];
 		$totalFiltered = $totalData;
-
 		if (!empty($sSearch)) {
 			$temp_filter = "nm_wil like '%".$sSearch."%'";
-			$temp_rec = $this->feeder->getrset($this->session->userdata('token'),
-												$this->table, $temp_filter,'',
-												$temp_limit,$temp_offset
+			$temp_rec = $this->feeder->getrset(
+				$this->session->userdata('token'),
+				$this->table, $temp_filter,'',
+				$temp_limit,$temp_offset
 						);
-			//$totalFiltered = count($temp_rec['result']);
 			$__total = $this->feeder->count_all($this->session->userdata('token'),$this->table,$temp_filter);
 			$totalFiltered = $__total['result'];
 		} else {
-			$temp_rec = $this->feeder->getrset($this->session->userdata('token'),
-												$this->table, $this->filter,'',
-												$temp_limit,$temp_offset
-						);
+			$temp_rec = $this->feeder->getrset(
+				$this->session->userdata('token'),
+				$this->table, $this->filter,'',
+				$temp_limit,$temp_offset
+			);
 		}
 		$temp_error_code = $temp_rec['error_code'];
 		$temp_error_desc = $temp_rec['error_desc'];
-
 		if (($temp_error_code==0) && ($temp_error_desc=='')) {
 			$temp_data = array();
 			$i=0;
 			foreach ($temp_rec['result'] as $key) {
 				$temps = array();
-				//$temps[] = '<a href="oke">Test</a>';
 				$temps[] = ++$i+$temp_offset;
 				$temps[] = $key['id_wil'];
 				$temps[] = $key['nm_wil'];
 				$temp_data[] = $temps;
 			}
 			$temp_output = array(
-									'draw' => intval($this->input->get('draw')),
-									'recordsTotal' => intval( $totalData ),
-									'recordsFiltered' => intval( $totalFiltered ),
-									'data' => $temp_data
-				);
+				'draw' => intval($this->input->get('draw')),
+				'recordsTotal' => intval( $totalData ),
+				'recordsFiltered' => intval( $totalFiltered ),
+				'data' => $temp_data
+			);
 			echo json_encode($temp_output);
+		}
+	}
+	public function createexcel(){
+		$this->benchmark->mark('mulai');
+		$p = $this->input->get('p');
+		if (!file_exists($this->template)) {
+			echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>File template tidak tersedia.</div>";
+		} else {
+			$temp_rec = $this->feeder->getrset(
+									$this->session->userdata('token'), $this->table, 
+									$this->filter,'',
+									$this->limit,$this->offset
+								  );
+			$temp_error_code = $temp_rec['error_code'];
+			$temp_error_desc = $temp_rec['error_desc'];
+			$data0 = array();
+			if (($temp_error_code==0) && ($temp_error_desc=='')) {
+				$temp_data = array();
+				foreach ($temp_rec['result'] as $key) {
+					$temps = array();
+					$temps[] = $key['id_wil'];
+					$temps[] = $key['nm_wil'];
+					$data0[] = $temps;
+				}
+			}			
+
+			$objPHPExcel = PHPExcel_IOFactory::load($this->template);
+			$objPHPExcel->setActiveSheetIndex(0);
+			$baseRow = 3;
+			foreach($data0 as $r => $dataRow) {
+				$row = $baseRow + $r;
+				$objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+				$objPHPExcel->getActiveSheet()->setCellValue('A'.$row, $dataRow[0])
+											  ->setCellValue('B'.$row, $dataRow[1]);
+			}
+			$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
+			$filename = time().'-wilayah_template.xlsx';
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+			$temp_tulis = $objWriter->save('temps/'.$filename);
+			$this->benchmark->mark('selesai');
+			$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
+			if ($temp_tulis==NULL) {
+				echo "<div class=\"bs-callout bs-callout-success\">
+						File berhasil digenerate dalam waktu <strong>".$time_eks." detik</strong>. 
+						<br />Klik <a href=\"".base_url()."index.php/file/download/".$filename."\">disini</a> untuk download file
+					</div>";
+			} else {
+				echo "<div class=\"bs-callout bs-callout-danger\">
+						<h4>Error</h4>File tidak bisa digenerate. Folder 'temps' tidak ada atau tidak bisa ditulisi.
+					</div>";
+			}
 		}
 	}
 }

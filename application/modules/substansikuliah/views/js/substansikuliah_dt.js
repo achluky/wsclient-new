@@ -34,7 +34,7 @@
 
 	$(".btn-download").click(function(e){
 		e.preventDefault();
-		var url = top_url+'matakuliah/createexcel/';
+		var url = top_url+'substansikuliah/createexcel/';
 		var l = Ladda.create(this);
 		var prodi = $('.prodi').val();
 		$(".isi").hide();

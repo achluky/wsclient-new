@@ -1,16 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * WS Client Feeder AKM Module
- * 
- * @author 		Yusuf Ayuba
- * @copyright   2015
- * @link        http://jago.link
- * @package     https://github.com/virbo/wsfeeder
- * 
-*/
-
 class Akm extends CI_Controller {
 
 	//private $data;
@@ -39,14 +29,11 @@ class Akm extends CI_Controller {
 			$this->load->helper('csv');
 			$this->load->library('excel');
 			$this->template = './template/akm_template.xlsx';
-
 			$config['upload_path'] = $this->config->item('upload_path');
 			$config['allowed_types'] = $this->config->item('upload_tipe');
 			$config['max_size'] = $this->config->item('upload_max_size');
 			$config['encrypt_name'] = TRUE;
-
 			$this->load->library('upload',$config);
-
 			$temp_setting = read_file('setting.ini');
 			$pecah = explode('#', $temp_setting);
 			$this->dir_ws = $pecah[1];
@@ -72,7 +59,6 @@ class Akm extends CI_Controller {
 			$this->session->set_flashdata('error','Kode PT Anda tidak ditemukan, silahkan masukkan kode PT anda dengan benar');
 			redirect('welcome/setting');
 		}
-
 		$data['error_code'] = $temp_rec['error_code'];
 		$data['error_desc'] = $temp_rec['error_desc'];
 		$data['site_title'] = 'Aktifitas Kuliah Mahasiswa';

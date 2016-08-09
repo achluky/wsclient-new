@@ -1,16 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * WS Client Feeder Mahasiswa Module
- * 
- * @author 		Yusuf Ayuba modified by ahmadluky
- * @copyright   2015
- * @link        http://jago.link
- * @package     https://github.com/virbo/wsfeeder
- * 
-*/
-
 class Mahasiswa extends CI_Controller {
 
 	private $limit;
@@ -25,8 +15,7 @@ class Mahasiswa extends CI_Controller {
 	private $host_ws;
 	private $port_ws;
 
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 		if (!$this->session->userdata('login')) {
 			redirect('ws');
@@ -62,13 +51,11 @@ class Mahasiswa extends CI_Controller {
 		}
 	}
 	
-	public function index()
-	{
+	public function index(){
 		$this->mhs();
 	}
 
-	public function mhs()
-	{
+	public function mhs(){
 		$temp_rec = $this->feeder->getrecord($this->session->userdata('token'), $this->table1, $this->filter);
 		$temp_sms = $this->feeder->getrset($this->session->userdata('token'), 
 											'sms', 
@@ -91,15 +78,13 @@ class Mahasiswa extends CI_Controller {
 		tampil('mahasiswa_view',$data);
 	}
 
-	public function nilaipindah($id_reg_pd='')
-	{
+	public function nilaipindah($id_reg_pd=''){
 		if (!empty($id_reg_pd)) {
 			$filter_nilai = "p.id_reg_pd='".$id_reg_pd."'";
 			$temp_nilai = $this->feeder->getrset($this->session->userdata('token'), 
 													$this->table2, $filter_nilai,
 													$this->order, '',''
 							);
-			//var_dump($temp_nilai['result']);
 			$temp_jml = count($temp_nilai['result']);
 			$data['nilai_pindah'] = $temp_nilai['result'];
 			$data['jml'] = $temp_jml;
@@ -109,9 +94,7 @@ class Mahasiswa extends CI_Controller {
         }
 	}
 
-
-	public function uploadexcel()
-	{
+	public function uploadexcel(){
 		$this->benchmark->mark('mulai');
 		if (!$this->upload->do_upload()) {
 			echo "<div class=\"bs-callout bs-callout-danger\">".$this->upload->display_errors()."</div>";
@@ -122,7 +105,7 @@ class Mahasiswa extends CI_Controller {
 			$objPHPExcel = PHPExcel_IOFactory::load($file_path);
 			switch ($mode) {
 				case 0:
-					echo "Import data mahasiswa";
+					echo "Import Data Mahasiswa <br/>";
 					$objPHPExcel->setActiveSheetIndex(0);
 					$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
 					$jml_row = $objPHPExcel->getActiveSheet()->getHighestRow()-1;
@@ -145,53 +128,96 @@ class Mahasiswa extends CI_Controller {
 						foreach ($arr_data as $key => $value) {
 							$nim = $value['B'];
 							$nm_mhs = $value['C'];
-							$tmp_lahir =$value['D'];
-							$tgl_lahir = date('Y-m-d', strtotime($value['E']));
-							$jk = trim($value['F']);
-							$agama = trim($value['G']);
-							$ds_kel = $value['H'];
-							$wilayah = trim($value['I']);
-							$nm_ibu = $value['J'];
-							// $kode_prodi = trim($value['K']);
-							$id_sms = trim($value['K']);
-							$tgl_masuk = date('Y-m-d', strtotime($value['L']));
-							$smt_awal = trim($value['M']);
-							$stat_mhs = trim($value['N']);
-							$stat_awal = trim($value['O']);
-							$sks_diakui = $value['P'];
-							$pt_asal = $value['Q'];
-							$prodi_asal = $value['R'];
-
-							// kode berikut untuk mendapatkan id_sms per setiap prodi
-							// tidak digunakan krn id_sms terdapat di tempate
-							/**
-							$filter_sms = "kode_prodi='".$kode_prodi."' AND id_sp='".$this->session->userdata('id_sp')."'";
-							$temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'sms',$filter_sms);
-							var_dump( $temp_sms );
-							$id_sms = $temp_sms['result']?$temp_sms['result']['id_sms']:'';
-							if ($id_sms == "") {
-								echo " id_sms kosong, cek data terkait kode prodi dan id_sp/satuan pendidikan ITERA";
-								echo $filter_sms;
-								break;
-							}
-							**/
-							// end 
+							$nisn = $value['D'];
+							$nik = $value['E'];
+							$tmp_lahir =$value['F'];
+							$tgl_lahir = date('Y-m-d', strtotime($value['G']));
+							$jk = trim($value['H']);
+							$agama = trim($value['I']);
+							$jln = trim($value['J']);
+							$rw = $value['K'];
+							$rt = $value['L'];
+							$ds_kel =trim($value['M']);
+							$nm_ds = trim($value['N']);
+							$wilayah = $value['O'];
+							$kode_pos = $value['P'];
+							$jenis_tinggal = $value['Q'];
+							$jenis_transfortasi = $value['R'];
+							$tlp_rumah = trim($value['S']);
+							$email = trim($value['T']);
+							$tlp_seluler = trim($value['U']);
+							$a_terima_kps = trim($value['V']);
+							$no_kps = trim($value['W']);
+							$stat_pd = trim($value['X']);
+							$nama_ayah = trim($value['Y']);
+							$tgl_lahir_a = date('Y-m-d', strtotime($value['Z']));
+							$jenjang_pendidikan_a = $value['AA'];
+							$pekerjaan_a = $value['AB'];
+							$penghasilan_ayah = $value['AC'];
+							$kebutuahn_khusus_ayah = $value['AD'];
+							$nm_ibu = trim($value['AE']);
+							$tgl_lahir_ibu = date('Y-m-d', strtotime($value['AF']));
+							$jenjang_pendidikan_i = $value['AG'];
+							$pekerjaan_i = $value['AH'];
+							$penghasilan_i = $value['AI'];
+							$kebutuahn_khusus_ibu = $value['AJ'];
+							$nm_wali = $value['AK'];
+							$tgl_lahir_wali = date('Y-m-d', strtotime($value['AL']));
+							$jenjang_pendidikan_wali = $value['AM'];
+							$pekerjaan_wali = $value['AN'];
+							$penghasilan_wali = $value['AO'];
+							$kewarganegaraan = trim($value['AP']);
+							$id_sms = trim($value['AQ']); //kode prodi
+							$tgl_masuk = date('Y-m-d', strtotime($value['AR']));
+							$smt_awal = trim($value['AS']);
+							$stat_mhs = trim($value['AT']);
+							$stat_awal = trim($value['AU']);
+							$sks_diakui = $value['AV'];
+							$pt_asal = $value['AW'];
+							$prodi_asal = $value['AX'];
 
 							$temp_data['nm_pd'] = $nm_mhs;
 							$temp_data['jk'] = $jk;
+							$temp_data['nisn'] = intval($nisn);
+							$temp_data['nik'] = intval($nik);
 							$temp_data['tmpt_lahir'] = $tmp_lahir;
 							$temp_data['tgl_lahir'] = $tgl_lahir;
 							$temp_data['id_agama'] = $agama;
 							$temp_data['id_kk'] = 0;
 							$temp_data['id_sp'] = $this->session->userdata('id_sp');
+							$temp_data['jln'] = $ds_kel;
+							$temp_data['rt'] = intval($rt);
+							$temp_data['rw'] = intval($rw);
+							$temp_data['nm_dsn'] = $nm_ds;
 							$temp_data['ds_kel'] = $ds_kel;
-							$temp_data['id_wil'] = $wilayah;
-							$temp_data['a_terima_kps'] = 0;
-							$temp_data['stat_pd'] = $stat_mhs;
-							$temp_data['id_kebutuhan_khusus_ayah'] = 0;
+							$temp_data['id_wil'] = intval($wilayah);
+							$temp_data['kode_pos'] = $kode_pos;
+							$temp_data['id_jns_tinggal'] = intval($jenis_tinggal);
+							$temp_data['id_alat_transport'] = intval($jenis_transfortasi);
+							$temp_data['telepon_rumah'] = $tlp_rumah;
+							$temp_data['telepon_seluler'] = $tlp_seluler;
+							$temp_data['email'] = $email;
+							$temp_data['a_terima_kps'] = $a_terima_kps;
+							$temp_data['no_kps'] = $no_kps;
+							$temp_data['stat_pd'] = $stat_pd;
+							$temp_data['nm_ayah'] = $nama_ayah;
+							$temp_data['tgl_lahir_ayah'] = $tgl_lahir_a;
+							$temp_data['id_jenjang_pendidikan_ayah'] = intval($jenjang_pendidikan_a);
+							$temp_data['id_pekerjaan_ayah'] = intval($pekerjaan_a);
+							$temp_data['id_penghasilan_ayah'] = intval($penghasilan_ayah);
+							$temp_data['id_kebutuhan_khusus_ayah'] = intval($kebutuahn_khusus_ayah);
 							$temp_data['nm_ibu_kandung'] = $nm_ibu;
-							$temp_data['id_kebutuhan_khusus_ibu'] = 0;
-							$temp_data['kewarganegaraan'] = 'ID';
+							$temp_data['tgl_lahir_ibu'] = $tgl_lahir_ibu;
+							$temp_data['id_jenjang_pendidikan_ibu'] = intval($jenjang_pendidikan_i);
+							$temp_data['id_penghasilan_ibu'] = intval($penghasilan_i);
+							$temp_data['id_pekerjaan_ibu'] = intval($pekerjaan_i);
+							$temp_data['id_kebutuhan_khusus_ibu'] = intval($kebutuahn_khusus_ibu);
+							$temp_data['nm_wali'] = $nm_wali;
+							$temp_data['tgl_lahir_wali'] = $tgl_lahir_wali;
+							$temp_data['id_jenjang_pendidikan_wali'] = intval($jenjang_pendidikan_wali);
+							$temp_data['id_pekerjaan_wali'] = intval($pekerjaan_wali);
+							$temp_data['id_penghasilan_wali'] = intval($penghasilan_wali);
+							$temp_data['kewarganegaraan'] = $kewarganegaraan;
 
 							$temps_data['id_sms'] = $id_sms;
 							$temps_data['id_sp'] = $this->session->userdata('id_sp');
@@ -206,6 +232,7 @@ class Mahasiswa extends CI_Controller {
 								$temps_data['nm_pt_asal'] = $pt_asal;
 								$temps_data['nm_prodi_asal'] = $prodi_asal;
 							}
+
 							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], $this->table, $temp_data);
 							if ($temp_result['result']) {
 								//Error handle
@@ -241,6 +268,13 @@ class Mahasiswa extends CI_Controller {
 												$error_msg[] = "<h4>Error ".$temp_result['result']['error_code'].' / '.$temps_result['result']['error_code']." (".$nm_mhs." / NIM: ".$nim.")</h4><strong>Biodata:</strong> ".$temp_result['result']['error_desc']."<br /><strong>Histori pendidikan:</strong> ".$temps_result['result']['error_desc']."";
 											}
 										}
+									}else{
+										echo "<div class=\"bs-callout bs-callout-danger\">
+												<h4>Error ".$temp_result['result']['error_code']."</h4>
+												".$temp_result['result']['error_desc']."
+												</div>
+											</div>";
+										break;
 									}
 								}
 							} else {
@@ -280,15 +314,13 @@ class Mahasiswa extends CI_Controller {
 					}
 					break;
 				case 1:
-					//echo "Mahasiswa Lulus/DO";
+					echo "Mahasiswa Lulus/DO";
 					$objPHPExcel->setActiveSheetIndex(1);
 					$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
-					//var_dump($cell_collection);
 					foreach ($cell_collection as $cell) {
 						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
 						$data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
-						
 						if ($row == 1) {
 							$header[$row][$column] = $data_value;
 						} else {
@@ -315,7 +347,6 @@ class Mahasiswa extends CI_Controller {
 							$ipk = $value['L'];
 							$no_seri_ijazah = $value['M'];
 							$keterangan = $value['N'];
-
 							$filter_regpd = "nipd LIKE '%".$nim."%' AND p.id_sp='".$this->session->userdata('id_sp')."'";
 							$temp_regpd = $this->feeder->getrecord($this->session->userdata('token'),$this->table1,$filter_regpd);
 							if ($temp_regpd['result']) {
@@ -350,11 +381,11 @@ class Mahasiswa extends CI_Controller {
 								}
 							}
 						} else {
-							echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
+							echo "<div class=\"bs-callout bs-callout-danger\"><h4>
+							Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
 						}
 						$this->benchmark->mark('selesai');
 						$time_eks = $this->benchmark->elapsed_time('mulai', 'selesai');
-
 						if ((!$sukses_count==0) || (!$error_count==0)) {
 							echo "Waktu eksekusi ".$time_eks." detik<br />
 									Results (total ".$i." baris data):<br /><font color=\"#3c763d\">".$sukses_count." data Mahasiswa Lulus/DO berhasil diupdate</font><br />
@@ -372,16 +403,14 @@ class Mahasiswa extends CI_Controller {
 					}
 					break;
 				case 2:
-					//echo "Nilai pindahan";
+					echo "Nilai pindahan";
 					$objPHPExcel->setActiveSheetIndex(2);
 					$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
 					$jml_row = $objPHPExcel->getActiveSheet()->getHighestRow()-1;
-					//var_dump($cell_collection);
 					foreach ($cell_collection as $cell) {
 						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
 						$data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
-						
 						if ($row == 1) {
 							$header[$row][$column] = $data_value;
 						} else {
@@ -411,27 +440,20 @@ class Mahasiswa extends CI_Controller {
 							$na_akui = trim($value['K']);
 							$sks_akui = trim($value['L']);
 							$kode_prodi = $value['M'];
-
-							//$filter_regpd = "nipd='".$nim."'";
 							$filter_regpd = "nipd LIKE '%".$nim."%' AND p.id_sp='".$this->session->userdata('id_sp')."'";
 							$temp_regpd = $this->feeder->getrecord($this->session->userdata('token'),$this->table1,$filter_regpd);
-							//var_dump($temp_regpd['result']);
 							if ($temp_regpd['result']) {
 								$id_reg_pd = $temp_regpd['result']['id_reg_pd'];
 							}
-
+							/**
 							$filter_sms = "p.id_sp='".$this->session->userdata('id_sp')."' AND kode_prodi='".$kode_prodi."'";
 							$temp_sms = $this->feeder->getrecord($this->session->userdata('token'),'sms',$filter_sms);
 							if ($temp_sms['result']) {
 								$id_sms = $temp_sms['result']['id_sms'];
 							}
-							//var_dump($temp_sms);
-							
-							$filter_mk = "kode_mk='".$kode_mk_diakui."' AND id_sms='".$id_sms."'";
-							//$filter_mk = "kode_mk='".$kode_mk_diakui."'";
+							**/
+							$filter_mk = "kode_mk='".$kode_mk_diakui."' AND id_sms='".$kode_prodi."'";
 							$temp_mk = $this->feeder->getrecord($this->session->userdata('token'),'mata_kuliah',$filter_mk);
-							//var_dump($filter_mk);
-							//var_dump($temp_mk);
 							if ($temp_mk['result']) {
 								$id_mk = $temp_mk['result']['id_mk'];
 							}
@@ -445,17 +467,20 @@ class Mahasiswa extends CI_Controller {
 							$temp_data['nilai_huruf_diakui'] = $nh_akui;
 							$temp_data['nilai_angka_diakui'] = $na_akui;
 							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], $this->table2, $temp_data);
-							//var_dump($temp_result);
 							if ($temp_result['result']) {
 								if ($temp_result['result']['error_desc']==NULL) {
 									++$sukses_count;
-									$sukses_msg[] = "<h4>Sukses</h4>Nilai pindahan mata kuliah <strong>".$nm_mk_diakui."</strong> untuk mahasiswa <strong>".$nm_mhs."</strong>/<strong>".$nim."</strong> berhasil ditambahkan";
+									$sukses_msg[] = "<h4>Sukses</h4>
+									Nilai pindahan mata kuliah <strong>".$nm_mk_diakui."</strong> untuk mahasiswa 
+									<strong>".$nm_mhs."</strong>/<strong>".$nim."</strong> berhasil ditambahkan";
 								} else {
 									++$error_count;
-									$error_msg[] = "<h4>Error ".$temp_result['result']['error_code']." (".$nm_mhs." / ".$nim.")</h4>".$temp_result['result']['error_desc'];
+									$error_msg[] = "<h4>Error ".$temp_result['result']['error_code']." (".$nm_mhs." / ".$nim.")</h4>
+									".$temp_result['result']['error_desc'];
 								}
 							} else {
-								echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>".$temp_result['error_desc']."</div></div>";
+								echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error ".$temp_result['error_code']."</h4>
+								".$temp_result['error_desc']."</div></div>";
 								break;
 							}
 						}
@@ -476,7 +501,8 @@ class Mahasiswa extends CI_Controller {
 
 							echo "<font color=\"#ce4844\" >".$error_count." data tidak bisa ditambahkan </font>";
 									if ($error_count!=0) {
-										echo "<a data-toggle=\"collapse\" href=\"#cols_error\" aria-expanded=\"false\" aria-controls=\"cols_error\">Detail error</a>";
+										echo "<a data-toggle=\"collapse\" href=\"#cols_error\" aria-expanded=\"false\" aria-controls=\"cols_error\">
+										Detail error</a>";
 									}
 									echo "<div class=\"collapse\" id=\"cols_error\">";
 													foreach ($error_msg as $pesan) {
@@ -498,16 +524,49 @@ class Mahasiswa extends CI_Controller {
 		if (!file_exists($this->template)) {
 			echo "<div class=\"bs-callout bs-callout-danger\"><h4>Error</h4>File template tidak tersedia.</div>";
 		} else {
-			//Status Awal Masuk	SKS Diakui	PT Asal	PRODI Asal
-			$data0 = array(array('nim' => '1234',
+			//Status Awal Masuk	SKS Diakui PT Asal	PRODI Asal
+			$data0 = array(
+						array('nim' => '1234',
 							'nama' => 'Mahasiswa 1',
+							'nisn' => '99788675655',
+							'nik' => '7676766',
 							'tmp_lahir' => 'Banggai',
 							'tgl_lahir' => '1980-08-23',
 							'jk' => 'L',
 							'agama' => '1',
+							'jln' => 'jalan. sudiraman',
+							'rt' => '21',
+							'rw' => '1',
+							'nm_ds' => 'oke nama _ds',
 							'ds_kel' => 'Kel. Tano Bonunungan',
 							'wilayah' => '999999',
+							'kode_pos' => '898',
+							'jenis_tinggal' => 3,
+							'jenis_transfortasi' => 1,
+							'tlp_rumah' => '012-837237',
+							'email' => 'oke@yahoo.com',
+							'tlp_seluler' => '085-839372736',
+							'a_terima_kps' => 0,
+							'no_kps' => '',
+							'stat_pd' => 'A',
+							'nama_ayah' => 'Ayah Tercinta',
+							'tgl_lahir_a' => '1980-08-23',
+							'jenjang_pendidikan_a' => 6,
+							'pekerjaan_a' => 4,
+							'penghasilan_ayah' => 11,
+							'kebutuahn_khusus_ayah' => 0,
 							'nm_ibu' => 'Ibuku tercinta',
+							'tgl_lahir_ibu' => '1980-08-23',
+							'jenjang_pendidikan_i' => 6,
+							'pekerjaan_i' => 4,
+							'penghasilan_i' => 11,
+							'kebutuahn_khusus_ibu' => 0,
+							'nm_wali' => '',
+							'tgl_lahir_wali' => '',
+							'jenjang_pendidikan_wali' => '',
+							'pekerjaan_wali' => '',
+							'penghasilan_wali' => '',
+							'kewarganegaraan' => 'ID',
 							'kode_prodi' => $p, // id_sms
 							'tgl_masuk' => '2015-09-20',
 							'smt_masuk' => '20151',
@@ -518,21 +577,53 @@ class Mahasiswa extends CI_Controller {
 							'prodi_asal' => ''),
 						array('nim' => '2345',
 							'nama' => 'Mahasiswa 2',
-							'tmp_lahir' => 'Pemalang',
-							'tgl_lahir' => '1982-11-23',
-							'jk' => 'P',
+							'nisn' => '99788675655',
+							'nik' => '7676766',
+							'tmp_lahir' => 'Banggai',
+							'tgl_lahir' => '1980-08-23',
+							'jk' => 'L',
 							'agama' => '1',
-							'ds_kel' => 'Pemalang',
+							'jln' => 'jalan. sudiraman',
+							'rt' => '21',
+							'rw' => '1',
+							'nm_ds' => 'oke nama _ds',
+							'ds_kel' => 'Kel. Tano Bonunungan',
 							'wilayah' => '999999',
-							'nm_ibu' => 'Ibuku tersayang',
+							'kode_pos' => '898',
+							'jenis_tinggal' => 3,
+							'jenis_transfortasi' => 1,
+							'tlp_rumah' => '012-837237',
+							'email' => 'oke@yahoo.com',
+							'tlp_seluler' => '085-839372736',
+							'a_terima_kps' => 0,
+							'no_kps' => '',
+							'stat_pd' => 'A',
+							'nama_ayah' => 'Ayah Tercinta',
+							'tgl_lahir_a' => '1980-08-23',
+							'jenjang_pendidikan_a' => 6,
+							'pekerjaan_a' => 4,
+							'penghasilan_ayah' => 11,
+							'kebutuahn_khusus_ayah' => 0,
+							'nm_ibu' => 'Ibuku tercinta',
+							'tgl_lahir_ibu' => '1980-08-23',
+							'jenjang_pendidikan_i' => 6,
+							'pekerjaan_i' => 4,
+							'penghasilan_i' => 11,
+							'kebutuahn_khusus_ibu' => 0,
+							'nm_wali' => '',
+							'tgl_lahir_wali' => '',
+							'jenjang_pendidikan_wali' => '',
+							'pekerjaan_wali' => '',
+							'penghasilan_wali' => '',
+							'kewarganegaraan' => 'ID',
 							'kode_prodi' => $p, // id_sms
-							'tgl_masuk' => '2014-09-20',
-							'smt_masuk' => '20141',
+							'tgl_masuk' => '2015-09-20',
+							'smt_masuk' => '20151',
 							'stat_mhs' => 'A',
-							'stat_awal' => '2',
-							'sks_diakui' => '50',
-							'pt_asal' => 'PT Suka Maju',
-							'prodi_asal' => 'Keperawatan')
+							'stat_awal' => '1',
+							'sks_diakui' => '',
+							'pt_asal' => '',
+							'prodi_asal' => ''),
 				   );
 			$data1 = array(array('nim' => '1234',
 							'nama' => 'Mahasiswa 1',
@@ -545,8 +636,12 @@ class Mahasiswa extends CI_Controller {
 							'sk_yudisium' => '123/09/2015',
 							'tgl_yudisium' => '2015-09-30',
 							'ipk' => 3,
-							'no_seri_ijazah' => '',
-							'keterangan' => ''),
+							'no_seri_ijazah'=>'',
+							'keterangan' => '',
+							'skhun' => '',
+							'pernah_paud' => '',
+							'pernah_tk' => '',
+							'mulai_semester' => ''),
 						array('nim' => '2345',
 							'nama' => 'Mahasiswa 2',
 							'jenis_keluar' => 1,
@@ -559,7 +654,11 @@ class Mahasiswa extends CI_Controller {
 							'tgl_yudisium' => '2015-09-30',
 							'ipk' => 3.7,
 							'no_seri_ijazah' => '',
-							'keterangan' => ''),
+							'keterangan' => '',
+							'skhun' => '',
+							'pernah_paud' => '',
+							'pernah_tk' => '',
+							'mulai_semester' =>''),
 					);
 			$data2 = array(array('nim' => '2345',
 							'nama' => 'Mahasiswa 2',
@@ -592,24 +691,57 @@ class Mahasiswa extends CI_Controller {
 			foreach($data0 as $r => $dataRow) {
 				$row = $baseRow + $r;
 				$objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
-				$objPHPExcel->getActiveSheet()->setCellValue('A'.$row, $r+1)
+				$objPHPExcel->getActiveSheet()
+									->setCellValue('A'.$row, $r+1)
 									->setCellValue('B'.$row, $dataRow['nim'])
 									->setCellValue('C'.$row, $dataRow['nama'])
-									->setCellValue('D'.$row, $dataRow['tmp_lahir'])
-									->setCellValue('E'.$row, $dataRow['tgl_lahir'])
-									->setCellValue('F'.$row, $dataRow['jk'])
-									->setCellValue('G'.$row, $dataRow['agama'])
-									->setCellValue('H'.$row, $dataRow['ds_kel'])
-									->setCellValue('I'.$row, $dataRow['wilayah'])
-									->setCellValue('J'.$row, $dataRow['nm_ibu'])
-									->setCellValue('K'.$row, $dataRow['kode_prodi'])
-									->setCellValue('L'.$row, $dataRow['tgl_masuk'])
-									->setCellValue('M'.$row, $dataRow['smt_masuk'])
-									->setCellValue('N'.$row, $dataRow['stat_mhs'])
-									->setCellValue('O'.$row, $dataRow['stat_awal'])
-									->setCellValue('P'.$row, $dataRow['sks_diakui'])
-									->setCellValue('Q'.$row, $dataRow['pt_asal'])
-									->setCellValue('R'.$row, $dataRow['prodi_asal']);
+									->setCellValue('D'.$row, $dataRow['nisn'])
+									->setCellValue('E'.$row, $dataRow['nik'])
+									->setCellValue('F'.$row, $dataRow['tmp_lahir'])
+									->setCellValue('G'.$row, $dataRow['tgl_lahir'])
+									->setCellValue('H'.$row, $dataRow['jk'])
+									->setCellValue('I'.$row, $dataRow['agama'])
+									->setCellValue('J'.$row, $dataRow['jln'])
+									->setCellValue('K'.$row, $dataRow['rw'])
+									->setCellValue('L'.$row, $dataRow['rt'])
+									->setCellValue('M'.$row, $dataRow['ds_kel'])
+									->setCellValue('N'.$row, $dataRow['nm_ds'])
+									->setCellValue('O'.$row, $dataRow['wilayah'])
+									->setCellValue('P'.$row, $dataRow['kode_pos'])
+									->setCellValue('Q'.$row, $dataRow['jenis_tinggal'])
+									->setCellValue('R'.$row, $dataRow['jenis_transfortasi'])
+									->setCellValue('S'.$row, $dataRow['tlp_rumah'])
+									->setCellValue('T'.$row, $dataRow['email'])
+									->setCellValue('U'.$row, $dataRow['tlp_seluler'])
+									->setCellValue('V'.$row, $dataRow['a_terima_kps'])
+									->setCellValue('W'.$row, $dataRow['no_kps'])
+									->setCellValue('X'.$row, $dataRow['stat_pd'])
+									->setCellValue('Y'.$row, $dataRow['nama_ayah'])
+									->setCellValue('Z'.$row, $dataRow['tgl_lahir_a'])
+									->setCellValue('AA'.$row, $dataRow['jenjang_pendidikan_a'])
+									->setCellValue('AB'.$row, $dataRow['pekerjaan_a'])
+									->setCellValue('AC'.$row, $dataRow['penghasilan_ayah'])
+									->setCellValue('AD'.$row, $dataRow['kebutuahn_khusus_ayah'])
+									->setCellValue('AE'.$row, $dataRow['nm_ibu'])
+									->setCellValue('AF'.$row, $dataRow['tgl_lahir_ibu'])
+									->setCellValue('AG'.$row, $dataRow['jenjang_pendidikan_i'])
+									->setCellValue('AH'.$row, $dataRow['pekerjaan_i'])
+									->setCellValue('AI'.$row, $dataRow['penghasilan_i'])
+									->setCellValue('AJ'.$row, $dataRow['kebutuahn_khusus_ibu'])
+									->setCellValue('AK'.$row, $dataRow['nm_wali'])
+									->setCellValue('AL'.$row, $dataRow['tgl_lahir_wali'])
+									->setCellValue('AM'.$row, $dataRow['jenjang_pendidikan_wali'])
+									->setCellValue('AN'.$row, $dataRow['pekerjaan_wali'])
+									->setCellValue('AO'.$row, $dataRow['penghasilan_wali'])
+									->setCellValue('AP'.$row, $dataRow['kewarganegaraan'])
+									->setCellValue('AQ'.$row, $dataRow['kode_prodi'])
+									->setCellValue('AR'.$row, $dataRow['tgl_masuk'])
+									->setCellValue('AS'.$row, $dataRow['smt_masuk'])
+									->setCellValue('AT'.$row, $dataRow['stat_mhs'])
+									->setCellValue('AU'.$row, $dataRow['stat_awal'])
+									->setCellValue('AV'.$row, $dataRow['sks_diakui'])
+									->setCellValue('AW'.$row, $dataRow['pt_asal'])
+									->setCellValue('AX'.$row, $dataRow['prodi_asal']);
 			}
 			$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
 
@@ -632,7 +764,11 @@ class Mahasiswa extends CI_Controller {
 									->setCellValue('K'.$row, $dataRow['tgl_yudisium'])
 									->setCellValue('L'.$row, $dataRow['ipk'])
 									->setCellValue('M'.$row, $dataRow['no_seri_ijazah'])
-									->setCellValue('N'.$row, $dataRow['keterangan']);
+									->setCellValue('N'.$row, $dataRow['keterangan'])
+									->setCellValue('N'.$row, $dataRow['skhun'])
+									->setCellValue('N'.$row, $dataRow['pernah_paud'])
+									->setCellValue('N'.$row, $dataRow['pernah_tk'])
+									->setCellValue('N'.$row, $dataRow['mulai_semester']);
 			}
 			$objPHPExcel->getActiveSheet()->removeRow($baseRow1-1,1);
 
@@ -653,9 +789,11 @@ class Mahasiswa extends CI_Controller {
 									->setCellValue('I'.$row, $dataRow['nm_mk_diakui'])
 									->setCellValue('J'.$row, $dataRow['nh_akui'])
 									->setCellValue('K'.$row, $dataRow['na_akui'])
-									->setCellValue('L'.$row, $dataRow['sks_akui']);
+									->setCellValue('L'.$row, $dataRow['sks_akui'])
+									->setCellValue('M'.$row, $p); //id sms prodi
 			}
 			$objPHPExcel->getActiveSheet()->removeRow($baseRow2-1,1);
+
 			$filename = time().'-template-mhs.xlsx';
 			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 			$temp_tulis = $objWriter->save('temps/'.$filename);
@@ -674,7 +812,8 @@ class Mahasiswa extends CI_Controller {
 		}
 	}
 
-	public function jsonMHS(){
+	public function jsonMHS()
+	{
 		$search = $this->input->post('search');
 		$sSearch = trim($search['value']);
 		$orders = $this->input->post('order');
@@ -688,7 +827,7 @@ class Mahasiswa extends CI_Controller {
 		$totalFiltered = $totalData;
 
 		if (!empty($sSearch)) {
-			$temp_filter = "((nm_pd LIKE '%".$sSearch."%') OR (nipd LIKE '%".$sSearch."%') AND (p.id_sp='".$this->session->userdata('id_sp')."'))";
+			$temp_filter = " nm_pd LIKE '%".$sSearch."%' AND p.id_sp='".$this->session->userdata('id_sp')."' ";
 			$temp_rec = $this->feeder->getrset($this->session->userdata('token'),
 												$this->table1, $temp_filter,
 												'nipd DESC',$temp_limit,$temp_offset

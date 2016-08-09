@@ -1,19 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * WS Client Feeder Mahasiswa Module
- * 
- * @author 		Yusuf Ayuba modified ahmadluky
- * @copyright   2015
- * @link        http://jago.link
- * @package     https://github.com/virbo/wsfeeder
- * 
-*/
-
 class Matakuliah extends CI_Controller {
 
-	//private $data;
 	private $limit;
 	private $filter;
 	private $order;
@@ -42,14 +31,11 @@ class Matakuliah extends CI_Controller {
 			$this->load->helper('csv');
 			$this->load->library('excel');
 			$this->template = './template/matakuliah_template.xlsx';
-
 			$config['upload_path'] = $this->config->item('upload_path');
 			$config['allowed_types'] = $this->config->item('upload_tipe');
 			$config['max_size'] = $this->config->item('upload_max_size');
 			$config['encrypt_name'] = TRUE;
-
 			$this->load->library('upload',$config);
-
 			$temp_setting = read_file('setting.ini');
 			$pecah = explode('#', $temp_setting);
 			$this->dir_ws = $pecah[1];
@@ -107,7 +93,6 @@ class Matakuliah extends CI_Controller {
 						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
 						$data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
-						
 						if ($row == 1) {
 							$header[$row][$column] = $data_value;
 						} else {
@@ -257,7 +242,6 @@ class Matakuliah extends CI_Controller {
 										->setCellValue('T'.$row, $dataRow['tgl_ak_ef']);
 				}
 				$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
-
 				$filename = time().'-template-matakuliah.xlsx';
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				$temp_tulis = $objWriter->save('temps/'.$filename);

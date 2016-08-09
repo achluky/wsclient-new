@@ -55,12 +55,13 @@
                                 <li class=\"dropdown\">
                                   <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\"><i class=\"fa fa-clone\"></i> Import Data <span class=\"caret\"></span></a>
                                   <ul class=\"dropdown-menu\" role=\"menu\">
-                                    <li><a href=\"".base_url()."mahasiswa\"><i class=\"fa fa-graduation-cap\"></i> Mahasiswa</a></li>
+                                    <li><a href=\"".base_url()."mahasiswa\"><i class=\"fa fa-graduation-cap\"></i> Daftar Mahasiswa/Lulus/Drop Out</a></li>
                                     <li class=\"divider\"></li>
-                                    <li><a href=\"".base_url()."akm\"><i class=\"fa fa-graduation-cap\"></i> Aktivitas Kuliah Mahasiswa</a></li>
                                     <li><a href=\"".base_url()."matakuliah\"><i class=\"fa fa-graduation-cap\"></i> Mata Kuliah</a></li>
                                     <li><a href=\"".base_url()."substansikuliah\"><i class=\"fa fa-graduation-cap\"></i> Substansi Kuliah</a></li>
+                                    <li><a href=\"".base_url()."\"><i class=\"fa fa-graduation-cap\"></i> Kurikulum (dev)</a></li>
                                     <li><a href=\"".base_url()."kelas\"><i class=\"fa fa-graduation-cap\"></i> Kelas/Nilai Perkuliahan</a></li>
+                                    <li><a href=\"".base_url()."akm\"><i class=\"fa fa-graduation-cap\"></i> Aktivitas Kuliah Mahasiswa</a></li>
                                     <li class=\"divider\"></li>
                                     <li><a href=\"".base_url()."skalanilai\"><i class=\"fa fa-graduation-cap\"></i> Skala Nilai</a></li>
                                     <li><a href=\"".base_url()."kapasitasmhsbaru\"><i class=\"fa fa-graduation-cap\"></i> Kapasitas Mahasiswa Baru</a></li>

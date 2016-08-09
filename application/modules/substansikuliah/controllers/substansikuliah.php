@@ -1,16 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * WS Client Feeder Mahasiswa Module
- * 
- * @author 		Yusuf Ayuba modified ahmadluky
- * @copyright   2015
- * @link        http://jago.link
- * @package     https://github.com/virbo/wsfeeder
- * 
-*/
-
 class Substansikuliah extends CI_Controller {
 
 	//private $data;
@@ -41,15 +31,12 @@ class Substansikuliah extends CI_Controller {
 			$this->load->model('m_feeder','feeder');
 			$this->load->helper('csv');
 			$this->load->library('excel');
-			$this->template = './template/matakuliah_template.xlsx';
-
+			$this->template = './template/substansi_template.xlsx';
 			$config['upload_path'] = $this->config->item('upload_path');
 			$config['allowed_types'] = $this->config->item('upload_tipe');
 			$config['max_size'] = $this->config->item('upload_max_size');
 			$config['encrypt_name'] = TRUE;
-
 			$this->load->library('upload',$config);
-
 			$temp_setting = read_file('setting.ini');
 			$pecah = explode('#', $temp_setting);
 			$this->dir_ws = $pecah[1];
@@ -108,7 +95,6 @@ class Substansikuliah extends CI_Controller {
 						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
 						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
 						$data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
-						
 						if ($row == 1) {
 							$header[$row][$column] = $data_value;
 						} else {
@@ -125,24 +111,13 @@ class Substansikuliah extends CI_Controller {
 						foreach ($arr_data as $key => $value) 
 						{
 							$temp_data['id_sms'] = $value['B'];
-							$temp_data['id_jenj_didik'] = $value['C'];
-							$temp_data['kode_mk'] =$value['D'];
-							$temp_data['nm_mk'] = $value['E'];
-							$temp_data['jns_mk'] = $value['F'];
-							$temp_data['kel_mk'] = $value['G'];
-							$temp_data['sks_mk'] = $value['H'];
-							$temp_data['sks_tm'] = $value['I'];
-							$temp_data['sks_prak'] = $value['J'];
-							$temp_data['sks_prak_lap'] = trim($value['K']);
-							$temp_data['sks_sim'] = trim($value['L']);
-							$temp_data['metode_pelaksanaan_kuliah'] = $value['M'];
-							$temp_data['a_sap'] = $value['N'];
-							$temp_data['a_silabus'] = $value['O'];
-							$temp_data['a_bahan_ajar'] = $value['P'];
-							$temp_data['acara_prak'] = $value['Q'];
-							$temp_data['a_diktat'] = $value['R'];
-							$temp_data['tgl_mulai_efektif'] = trim($value['S']);
-							$temp_data['tgl_akhir_efektif'] = trim($value['T']);
+							$temp_data['nm_subst'] = $value['C'];
+							$temp_data['id_jns_subst'] =$value['D'];
+							$temp_data['sks_mk'] = $value['E'];
+							$temp_data['sks_tm'] = $value['F'];
+							$temp_data['sks_prak'] = $value['G'];
+							$temp_data['sks_prak_lap'] = trim($value['H']);
+							$temp_data['sks_sim'] = trim($value['I']);
 
 							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], $this->table, $temp_data);
 							if ($temp_result['result']) {
@@ -193,9 +168,7 @@ class Substansikuliah extends CI_Controller {
 		}
 	}
 
-	public function createexcel()
-	{
-		
+	public function createexcel(){
 		$this->benchmark->mark('mulai');
 		$p = $this->input->get('p');
 		if($p==""){
@@ -210,27 +183,18 @@ class Substansikuliah extends CI_Controller {
 				//
 				$data = array(
 							array('id_sms' => $prodi[0],
-								'id_jenjang_pendidikan' => $prodi[1],
-								'kode_mk' => '',
-								'mk_kuliah' => '',
-								'jenis_mk' => '',
-								'klompok_mk' => '',
+								'nm_subst' => '',
+								'id_jns_subst' => 1,
 								'sks_mk' => '',
 								'sks_tm' => '',
 								'sks_prak' => '',
-								'sks_pl' => '',
-								'sks_sim' => '',
-								'metode_k' => '',
-								'a_sap' => '',
-								'a_sil' => '',
-								'a_ba' => '',
-								'a_prak' => '',
-								'a_diklat' => '',
-								'tgl_ef' => "'2015-13-24",
-								'tgl_ak_ef' => "'2015-13-24")
+								'sks_mk' => '',
+								'sks_tm' => '',
+								'sks_prak' => '',
+								'sks_prak_lap' => '',
+								'sks_sim' => '')
 						);
 				$objPHPExcel = PHPExcel_IOFactory::load($this->template);
-
 				//SET SHEET Mata Kuliah
 				$objPHPExcel->setActiveSheetIndex(0);
 				$baseRow = 3;
@@ -239,28 +203,16 @@ class Substansikuliah extends CI_Controller {
 					$objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
 					$objPHPExcel->getActiveSheet()->setCellValue('A'.$row, $r+1)
 										->setCellValue('B'.$row, $dataRow['id_sms'])
-										->setCellValue('C'.$row, $dataRow['id_jenjang_pendidikan'])
-										->setCellValue('D'.$row, $dataRow['kode_mk'])
-										->setCellValue('E'.$row, $dataRow['mk_kuliah'])
-										->setCellValue('F'.$row, $dataRow['jenis_mk'])
-										->setCellValue('G'.$row, $dataRow['klompok_mk'])
-										->setCellValue('H'.$row, $dataRow['sks_mk'])
-										->setCellValue('I'.$row, $dataRow['sks_tm'])
-										->setCellValue('J'.$row, $dataRow['sks_prak'])
-										->setCellValue('K'.$row, $dataRow['sks_pl'])
-										->setCellValue('L'.$row, $dataRow['sks_sim'])
-										->setCellValue('M'.$row, $dataRow['metode_k'])
-										->setCellValue('N'.$row, $dataRow['a_sap'])
-										->setCellValue('O'.$row, $dataRow['a_sil'])
-										->setCellValue('P'.$row, $dataRow['a_ba'])
-										->setCellValue('Q'.$row, $dataRow['a_prak'])
-										->setCellValue('R'.$row, $dataRow['a_diklat'])
-										->setCellValue('S'.$row, $dataRow['tgl_ef'])
-										->setCellValue('T'.$row, $dataRow['tgl_ak_ef']);
+										->setCellValue('C'.$row, $dataRow['nm_subst'])
+										->setCellValue('D'.$row, $dataRow['id_jns_subst'])
+										->setCellValue('E'.$row, $dataRow['sks_mk'])
+										->setCellValue('F'.$row, $dataRow['sks_tm'])
+										->setCellValue('G'.$row, $dataRow['sks_prak'])
+										->setCellValue('H'.$row, $dataRow['sks_prak_lap'])
+										->setCellValue('I'.$row, $dataRow['sks_sim']);
 				}
 				$objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
-
-				$filename = time().'-template-matakuliah.xlsx';
+				$filename = time().'-substansi_template.xlsx';
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				$temp_tulis = $objWriter->save('temps/'.$filename);
 				$this->benchmark->mark('selesai');

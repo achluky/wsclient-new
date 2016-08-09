@@ -27,9 +27,9 @@
 									<span class=\"input-group-btn\">
 										<button data-toggle=\"dropdown\" class=\"btn btn-sm btn-primary dropdown-toggle\"> Substansi Kuliah <span class=\"caret\"></span></button>
 										<ul class=\"dropdown-menu\">
-											<li><input type=\"radio\" name=\"mode\" id=\"substansikuliah\" value=\"1\" checked><label for=\"substansikuliah\">Substansi Kuliah</label></li>
+											<li><input type=\"radio\" name=\"mode\" id=\"substansikuliah\" value=\"0\" checked><label for=\"substansikuliah\">Substansi Kuliah</label></li>
 									    </ul>
-										<button class=\"btn btn-primary btn-sm btn-upload ladda-button\" data-style=\"expand-right\" disabled>Upload</button>
+										<button class=\"btn btn-primary btn-sm btn-upload ladda-button\" data-style=\"expand-right\" >Upload</button>
 									</span>
 								</div>
 			                </div>
@@ -39,19 +39,19 @@
 								<div class=\"form-group\">
 
 								    <div class=\"col-sm-4\">
-								    	<select class=\"form-control input-sm prodi\" name=\"prodi\" required disabled=\"disabled\">
+								    	<select class=\"form-control input-sm prodi\" name=\"prodi\" required>
 											<option value=\"\">-Pilih Nama Prodi-</option>
 										  ";
 										  		
-										  	foreach ($program_studi as $key) {
-										  		echo "<option value='".$key['id_sms']."|".$key['id_jenj_didik']."'>".$key['nm_lemb']."</option>";
-										  	}
+												  	foreach ($program_studi as $key) {
+												  		echo "<option value='".$key['id_sms']."|".$key['id_jenj_didik']."'>".$key['nm_lemb']."</option>";
+												  	}
 
 										  echo "
 										</select>
 								    </div>
 								    <div class=\"col-sm-2\">
-									    <a href=\"javascript:void();\" class=\"btn btn-info btn-sm btn-download ladda-button\" data-style=\"expand-right\" disabled>
+									    <a href=\"javascript:void();\" class=\"btn btn-info btn-sm btn-download ladda-button\" data-style=\"expand-right\" >
 											<i class=\"fa fa-download\"></i> Generate Template
 										</a>
 									</div>
