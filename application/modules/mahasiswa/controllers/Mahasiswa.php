@@ -156,7 +156,7 @@ class Mahasiswa extends CI_Controller {
 
 							// $tlp_rumah = isset($value['S']) ? trim($value['S']) : NULL;
 							$email = isset($value['T']) ? trim($value['T']) : "";
-							$tlp_seluler = isset($value['U']) ? substr(trim($value['U']), 10) : "";
+							$tlp_seluler = isset($value['U']) ? trim($value['U']) : "";
 							$a_terima_kps = isset($value['V']) ? trim($value['V']) : "";
 							$no_kps = isset($value['W']) ? trim($value['W']) : "";
 							$stat_pd = trim($value['X']); // status mahasiswa didik (LULUS, CUTI DLL)
@@ -205,7 +205,7 @@ class Mahasiswa extends CI_Controller {
 							$temp_data['id_jns_tinggal'] = intval($jenis_tinggal);
 							$temp_data['id_alat_transport'] = intval($jenis_transfortasi);
 							$temp_data['telepon_rumah'] = $tlp_rumah;
-							$temp_data['telepon_seluler'] = $tlp_seluler;
+							$temp_data['telepon_seluler'] = "0".$tlp_seluler;
 							$temp_data['email'] = $email;
 							$temp_data['a_terima_kps'] = $a_terima_kps;
 							$temp_data['no_kps'] = $no_kps;
