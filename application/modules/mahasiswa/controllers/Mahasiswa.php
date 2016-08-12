@@ -195,7 +195,7 @@ class Mahasiswa extends CI_Controller {
 							$temp_data['id_agama'] = $agama;
 							$temp_data['id_kk'] = 0;
 							$temp_data['id_sp'] = $this->session->userdata('id_sp');
-							$temp_data['jln'] = $jln;
+							$temp_data['jln'] = substr($jln, 80);
 							$temp_data['rt'] = intval($rt);
 							$temp_data['rw'] = intval($rw);
 							$temp_data['nm_dsn'] = $ds_kel;
