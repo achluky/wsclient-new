@@ -129,7 +129,7 @@ class Mahasiswa extends CI_Controller {
 							$nim = $value['B'];
 							$nm_mhs = $value['C'];
 							$nisn = isset($value['D']) ? substr(trim($value['D']), -10) : "";
-							$nik = isset($value['E']) ? substr(trim(str_replace("'", "", $value['E'])), 16) : "";
+							$nik = isset($value['E']) ? substr( trim(str_replace("'", "", $value['E'])), 0, 16 ) : "";
 							$tmp_lahir =$value['F'];
 							$tgl_lahir = date('Y-m-d', strtotime($value['G']));
 							$jk = trim($value['H']);
@@ -195,7 +195,7 @@ class Mahasiswa extends CI_Controller {
 							$temp_data['id_agama'] = $agama;
 							$temp_data['id_kk'] = 0;
 							$temp_data['id_sp'] = $this->session->userdata('id_sp');
-							$temp_data['jln'] = substr($jln, 80);
+							$temp_data['jln'] = substr($jln, 0, 80);
 							$temp_data['rt'] = intval($rt);
 							$temp_data['rw'] = intval($rw);
 							$temp_data['nm_dsn'] = $ds_kel;
@@ -242,6 +242,9 @@ class Mahasiswa extends CI_Controller {
 								$temps_data['nm_pt_asal'] = $pt_asal;
 								$temps_data['nm_prodi_asal'] = $prodi_asal;
 							}
+
+							// var_dump($temp_data);
+							// debug($temps_data);
 
 							$temp_result = $this->feeder->insertrecord($this->session->userdata['token'], $this->table, $temp_data);
 							if ($temp_result['result']) {
