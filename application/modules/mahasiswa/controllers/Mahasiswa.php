@@ -139,7 +139,12 @@ class Mahasiswa extends CI_Controller {
 							$rt = $value['L'];
 							$ds_kel =trim($value['M']);
 							$nm_ds = trim($value['N']);
-							$wilayah = $value['O'];
+							
+							$wilayah = $value['O']; // kode wilayah di awal dengan tanda kutif
+							if ($wilayah[0] == "'") {
+								$wilayah = str_replace("'", "", $wilayah);
+							}
+							
 							$kode_pos = $value['P'];
 							$jenis_tinggal = $value['Q'];
 							$jenis_transfortasi = $value['R'];
@@ -167,7 +172,11 @@ class Mahasiswa extends CI_Controller {
 							$pekerjaan_wali = $value['AN'];
 							$penghasilan_wali = $value['AO'];
 							$kewarganegaraan = trim($value['AP']);
-							$id_sms = trim($value['AQ']); //kode prodi
+
+							$id_sms = prodi_id( //
+												trim($value['AQ'])
+											); //kode prodi
+
 							$tgl_masuk = date('Y-m-d', strtotime($value['AR']));
 							$smt_awal = trim($value['AS']);
 							$stat_mhs = trim($value['AT']);
