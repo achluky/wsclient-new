@@ -128,78 +128,79 @@ class Mahasiswa extends CI_Controller {
 						foreach ($arr_data as $key => $value) {
 							$nim = $value['B'];
 							$nm_mhs = $value['C'];
-							$nisn = $value['D'];
-							$nik = $value['E'];
+							$nisn = isset($value['D']) ? substr(trim($value['D']), -10) : "";
+							$nik = isset($value['E']) ? substr(trim(str_replace("'", "", $value['E'])), 16) : "";
 							$tmp_lahir =$value['F'];
 							$tgl_lahir = date('Y-m-d', strtotime($value['G']));
 							$jk = trim($value['H']);
-							$agama = trim($value['I']);
-							$jln = trim($value['J']);
+							$agama = intval($value['I']);
+							$jln = isset($value['D']) ? trim($value['J']) : "";
 							$rw = $value['K'];
 							$rt = $value['L'];
-							$ds_kel =trim($value['M']);
-							$nm_ds = trim($value['N']);
+							$ds_kel =trim($value['M']); // desa/keluran
+							$nm_ds = trim($value['N']); // kecamatan
 							
 							$wilayah = $value['O']; // kode wilayah di awal dengan tanda kutif
 							if ($wilayah[0] == "'") {
 								$wilayah = str_replace("'", "", $wilayah);
 							}
 							
-							$kode_pos = $value['P'];
+							$kode_pos = isset($value['P']) ? trim($value['P']) : "";
 							$jenis_tinggal = $value['Q'];
 							$jenis_transfortasi = $value['R'];
-							$tlp_rumah = trim($value['S']);
-							$email = trim($value['T']);
-							$tlp_seluler = trim($value['U']);
-							$a_terima_kps = trim($value['V']);
-							$no_kps = trim($value['W']);
-							$stat_pd = trim($value['X']);
+							if (!isset($value['S']) OR $value['S']=="") {
+								$tlp_rumah = NULL;
+							}else {
+								$tlp_rumah = str_pad($value['S'], 9, '0', STR_PAD_RIGHT);
+							}
+
+							// $tlp_rumah = isset($value['S']) ? trim($value['S']) : NULL;
+							$email = isset($value['T']) ? trim($value['T']) : "";
+							$tlp_seluler = isset($value['U']) ? substr(trim($value['U']), 10) : "";
+							$a_terima_kps = isset($value['V']) ? trim($value['V']) : "";
+							$no_kps = isset($value['W']) ? trim($value['W']) : "";
+							$stat_pd = trim($value['X']); // status mahasiswa didik (LULUS, CUTI DLL)
 							$nama_ayah = trim($value['Y']);
 							$tgl_lahir_a = date('Y-m-d', strtotime($value['Z']));
-							$jenjang_pendidikan_a = $value['AA'];
-							$pekerjaan_a = $value['AB'];
-							$penghasilan_ayah = $value['AC'];
-							$kebutuahn_khusus_ayah = $value['AD'];
+							$jenjang_pendidikan_a = isset($value['AA']) ? trim($value['AA']) : "";
+							$pekerjaan_a = isset($value['AB']) ? trim($value['AB']) : "";
+							$penghasilan_ayah = isset($value['AC']) ? trim($value['AC']) : "";
+							$kebutuahn_khusus_ayah = isset($value['AD']) ? trim($value['AD']) : "";
 							$nm_ibu = trim($value['AE']);
 							$tgl_lahir_ibu = date('Y-m-d', strtotime($value['AF']));
-							$jenjang_pendidikan_i = $value['AG'];
-							$pekerjaan_i = $value['AH'];
-							$penghasilan_i = $value['AI'];
-							$kebutuahn_khusus_ibu = $value['AJ'];
+							$jenjang_pendidikan_i = isset($value['AG']) ? trim($value['AG']) : "";
+							$pekerjaan_i = isset($value['AH']) ? trim($value['AH']) : "";
+							$penghasilan_i = isset($value['AI']) ? trim($value['AI']) : "";
+							$kebutuahn_khusus_ibu = isset($value['AJ']) ? trim($value['AJ']) : "";
 							$nm_wali = $value['AK'];
 							$tgl_lahir_wali = date('Y-m-d', strtotime($value['AL']));
-							$jenjang_pendidikan_wali = $value['AM'];
-							$pekerjaan_wali = $value['AN'];
-							$penghasilan_wali = $value['AO'];
+							$jenjang_pendidikan_wali = isset($value['AM']) ? trim($value['AM']) : "";
+							$pekerjaan_wali = isset($value['AN']) ? trim($value['AN']) : "";
+							$penghasilan_wali = isset($value['AO']) ? trim($value['AO']) : "";
 							$kewarganegaraan = trim($value['AP']);
-
-							$id_sms = prodi_id( //
-												trim($value['AQ'])
-											); //kode prodi
-
-							$tgl_masuk = date('Y-m-d', strtotime($value['AR']));
+							$id_sms = trim($value['AQ']);
+							$tgl_masuk = date('Y-m-d', strtotime(str_replace("'", "", $value['AR'])));
 							$smt_awal = trim($value['AS']);
-							$stat_mhs = trim($value['AT']);
-							$stat_awal = trim($value['AU']);
-							$sks_diakui = $value['AV'];
-							$pt_asal = $value['AW'];
-							$prodi_asal = $value['AX'];
+							$stat_awal = trim($value['AT']);
+							$sks_diakui = isset($value['AU']) ? trim($value['AU']) : "";
+							$pt_asal = isset($value['AV']) ? trim($value['AV']) : "";
+							$prodi_asal = isset($value['AW']) ? trim($value['AW']) : "";
 
 							$temp_data['nm_pd'] = $nm_mhs;
 							$temp_data['jk'] = $jk;
-							$temp_data['nisn'] = intval($nisn);
-							$temp_data['nik'] = intval($nik);
+							$temp_data['nisn'] = $nisn;
+							$temp_data['nik'] = $nik;
 							$temp_data['tmpt_lahir'] = $tmp_lahir;
 							$temp_data['tgl_lahir'] = $tgl_lahir;
 							$temp_data['id_agama'] = $agama;
 							$temp_data['id_kk'] = 0;
 							$temp_data['id_sp'] = $this->session->userdata('id_sp');
-							$temp_data['jln'] = $ds_kel;
+							$temp_data['jln'] = $jln;
 							$temp_data['rt'] = intval($rt);
 							$temp_data['rw'] = intval($rw);
-							$temp_data['nm_dsn'] = $nm_ds;
-							$temp_data['ds_kel'] = $ds_kel;
-							$temp_data['id_wil'] = intval($wilayah);
+							$temp_data['nm_dsn'] = $ds_kel;
+							$temp_data['ds_kel'] = $nm_ds;
+							$temp_data['id_wil'] = $wilayah;
 							$temp_data['kode_pos'] = $kode_pos;
 							$temp_data['id_jns_tinggal'] = intval($jenis_tinggal);
 							$temp_data['id_alat_transport'] = intval($jenis_transfortasi);

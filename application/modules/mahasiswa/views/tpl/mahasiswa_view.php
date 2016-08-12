@@ -8,9 +8,6 @@
 			</div>
 		</div>	
 	</div>
-	<!--a href="javascript:void();" class="modalButton" data-toggle="modal" data-src="ws_mahasiswa/view_nilai_pindah" data-target="#modalku">
-		Test
-	</a-->
 	<div class="row">
 		<?php
 			if (($error_code == 0) && ($error_desc == '')) {
@@ -62,9 +59,12 @@
 			}
 		?>	
 	</div>
-	<div class="alert alert-warning" role="alert" style="display:none;" ><!-- style="display:none;"-->
+
+	<div class="alert alert-warning" role="alert" style="display:none;" >
 		<div class="loading"></div>
+		<pre>
 		<div class="isi"></div>
+		</pre>
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
